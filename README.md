@@ -43,6 +43,8 @@ Finger 是一款专为 Burp Suite 打造的模块化指纹识别插件，旨在�
 ### 1. 被动识别
 插件会自动监听 Proxy 流量，实时识别经过的所有请求和响应中的技术指纹。识别结果展示在 `Finger` 标签页的表格中。
 
+![指纹识别](images/指纹识别.png)
+
 ### 2. 主动探测
 - **开启/关闭**：在 `Finger` 标签页勾选 `Enable Active Scan`。
 - **探测深度**：通过 `Scan Depth` 调整递归深度。
@@ -56,12 +58,20 @@ Finger 是一款专为 Burp Suite 打造的模块化指纹识别插件，旨在�
   - `Exclude Status Codes`: 设置不参与匹配的状态码列表（逗号或换行分隔）。
   - `Exclude Body Keywords`: 设置包含特定内容时跳过匹配的关键字列表（换行分隔）。
 
+![系统配置](images/系统配置.png)
+
 ### 4. Nuclei 集成
 - 在识别结果表格中点击右键，选择 `Copy Nuclei Scan Command`。
 - 插件会自动根据当前识别到的所有指纹名称，格式化为 Nuclei 的 `tags`（如 `spring-boot,nginx`），生成完整的命令行。
 
-### 4. 规则编写
-详细规则规格请参考：[docs/rules-spec.md](docs/rules-spec.md)
+![Nuclei联动](images/nuclei联动.png)
+
+### 5. 规则管理
+- 内置规则管理器，支持指纹搜索、在线更新、导出自定义规则。
+
+![规则配置](images/规则配置.png)
+
+### 6. 规则编写
 
 示例规则：
 ```json
