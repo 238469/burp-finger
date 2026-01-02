@@ -129,20 +129,41 @@ public class MatchingEngine {
         
         if (matches == null || matches.isEmpty()) return false;
 
-        for (String match : matches) {
+        for (String matchPattern : matches) {
             boolean found = false;
-            for (HttpHeader header : headers) {
-                if (field != null && !field.isEmpty()) {
-                    if (header.name().equalsIgnoreCase(field)) {
-                        if (header.value().contains(match)) {
+            try {
+                java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(matchPattern, java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.DOTALL);
+                
+                for (HttpHeader header : headers) {
+                    if (field != null && !field.isEmpty()) {
+                        if (header.name().equalsIgnoreCase(field)) {
+                            if (pattern.matcher(header.value()).find()) {
+                                found = true;
+                                break;
+                            }
+                        }
+                    } else {
+                        if (pattern.matcher(header.toString()).find()) {
                             found = true;
                             break;
                         }
                     }
-                } else {
-                    if (header.toString().contains(match)) {
-                        found = true;
-                        break;
+                }
+            } catch (Exception e) {
+                // 如果正则解析失败，退回到普通的 contains 匹配
+                for (HttpHeader header : headers) {
+                    if (field != null && !field.isEmpty()) {
+                        if (header.name().equalsIgnoreCase(field)) {
+                            if (header.value().contains(matchPattern)) {
+                                found = true;
+                                break;
+                            }
+                        }
+                    } else {
+                        if (header.toString().contains(matchPattern)) {
+                            found = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -156,9 +177,17 @@ public class MatchingEngine {
         if (matches == null || matches.isEmpty()) return false;
         if (bodyText == null) return false;
 
-        for (String match : matches) {
-            if (!bodyText.contains(match)) {
-                return false;
+        for (String matchPattern : matches) {
+            try {
+                java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(matchPattern, java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.DOTALL);
+                if (!pattern.matcher(bodyText).find()) {
+                    return false;
+                }
+            } catch (Exception e) {
+                // 如果正则解析失败，退回到普通的 contains 匹配
+                if (!bodyText.contains(matchPattern)) {
+                    return false;
+                }
             }
         }
         return true;

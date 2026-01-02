@@ -1,0 +1,8 @@
+[ {
+  "url" : "http://example.com/favicon.ico",
+  "timestamp" : "2026-01-01T19:02:11.4116214",
+  "fingerprints" : [ {
+    "name" : "TestCMS",
+    "type" : "CMS"
+  } ]
+} ]

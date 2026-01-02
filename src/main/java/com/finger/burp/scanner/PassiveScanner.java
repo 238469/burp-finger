@@ -109,25 +109,39 @@ public class PassiveScanner implements ProxyResponseHandler, ProxyRequestHandler
     private void processMatches(String url, List<MatchResult> matches, String method) {
         api.logging().logToOutput("[+] Found " + method + " Fingerprint(s) at " + url);
         
-        // 提取指纹对象用于持久化
+        // 1. 提取指纹对象用于持久化
         List<Fingerprint> fps = matches.stream()
                 .map(MatchResult::getFingerprint)
                 .distinct()
                 .collect(Collectors.toList());
         persistence.saveResults(url, fps);
         
-        // 更新 UI
+        // 2. 更新 UI（增加指纹级别的去重，防止同一个 URL 下同一个指纹显示多行）
+        // 使用 Set 记录当前 URL 已添加过的指纹名称
+        Set<String> addedFingerprints = new java.util.HashSet<>();
+        
         for (MatchResult match : matches) {
             Fingerprint fp = match.getFingerprint();
+            
+            // 如果这个指纹在这个 URL 下已经添加过了，就跳过
+            if (addedFingerprints.contains(fp.getName())) {
+                continue;
+            }
+            addedFingerprints.add(fp.getName());
+
             Rule rule = match.getMatchedRule();
             
             // 构造匹配字段描述
             String fieldDesc = rule.getLocation();
-            if (rule.getField() != null && !rule.getField().isEmpty()) {
-                fieldDesc += " (" + rule.getField() + ")";
-            }
-            if (rule.getMatch() != null && !rule.getMatch().isEmpty()) {
-                fieldDesc += ": " + rule.getMatch();
+            if (rule.getDescription() != null && !rule.getDescription().isEmpty()) {
+                fieldDesc = "[" + rule.getDescription() + "] " + fieldDesc;
+            } else {
+                if (rule.getField() != null && !rule.getField().isEmpty()) {
+                    fieldDesc += " (" + rule.getField() + ")";
+                }
+                if (rule.getMatch() != null && !rule.getMatch().isEmpty()) {
+                    fieldDesc += ": " + rule.getMatch();
+                }
             }
 
             tableModel.addResult(new ScanResult(url, fp.getName(), fp.getType(), method, fieldDesc));

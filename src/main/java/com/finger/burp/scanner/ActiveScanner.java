@@ -260,12 +260,16 @@ public class ActiveScanner {
                                         }
 
                                         String fieldDesc = displayLocation + ": " + fullPath;
-                                        if (rule.getMatch() != null && !rule.getMatch().isEmpty()) {
-                                            fieldDesc += " (match: " + rule.getMatch() + ")";
-                                        } else if (rule.getHash() != null && !rule.getHash().isEmpty()) {
-                                            fieldDesc += " (hash: " + rule.getHash() + ")";
-                                        } else if (rule.getStatus() != null) {
-                                            fieldDesc += " (status: " + rule.getStatus() + ")";
+                                        if (rule.getDescription() != null && !rule.getDescription().isEmpty()) {
+                                            fieldDesc = "[" + rule.getDescription() + "] " + fieldDesc;
+                                        } else {
+                                            if (rule.getMatch() != null && !rule.getMatch().isEmpty()) {
+                                                fieldDesc += " (match: " + rule.getMatch() + ")";
+                                            } else if (rule.getHash() != null && !rule.getHash().isEmpty()) {
+                                                fieldDesc += " (hash: " + rule.getHash() + ")";
+                                            } else if (rule.getStatus() != null) {
+                                                fieldDesc += " (status: " + rule.getStatus() + ")";
+                                            }
                                         }
 
                                         // 更新 UI

@@ -1,0 +1,6837 @@
+[
+  {
+    "name": "PHP",
+    "type": "Language",
+    "rules": [
+      {
+        "location": "header",
+        "field": "X-Powered-By",
+        "match": ["PHP"]
+      },
+      {
+        "location": "header",
+        "field": "Set-Cookie",
+        "match": ["PHPSESSID"]
+      }
+    ]
+  },
+  {
+    "name": "Java",
+    "type": "Language",
+    "rules": [
+      {
+        "location": "header",
+        "field": "X-Powered-By",
+        "match": ["Servlet", "JSP"]
+      },
+      {
+        "location": "header",
+        "field": "Set-Cookie",
+        "match": ["JSESSIONID"]
+      },
+      {
+        "location": "body",
+        "match": ["java.lang.", "javax.servlet"]
+      }
+    ]
+  },
+  {
+    "name": "Python",
+    "type": "Language",
+    "rules": [
+      {
+        "location": "header",
+        "field": "Server",
+        "match": ["Werkzeug", "Gunicorn"]
+      },
+      {
+        "location": "header",
+        "field": "X-Powered-By",
+        "match": ["Python"]
+      }
+    ]
+  },
+  {
+    "name": "ASP.NET",
+    "type": "Language",
+    "rules": [
+      {
+        "location": "header",
+        "field": "X-Powered-By",
+        "match": ["ASP.NET"]
+      },
+      {
+        "location": "header",
+        "field": "X-AspNet-Version",
+        "match": [".+"]
+      },
+      {
+        "location": "header",
+        "field": "Set-Cookie",
+        "match": ["ASP.NET_SessionId"]
+      },
+      {
+        "location": "body",
+        "match": ["__VIEWSTATE", "__EVENTVALIDATION"]
+      }
+    ]
+  },
+  {
+    "name": "Node.js",
+    "type": "Language",
+    "rules": [
+      {
+        "location": "header",
+        "field": "X-Powered-By",
+        "match": ["Express"]
+      }
+    ]
+  },
+  {
+    "name": "Ruby on Rails",
+    "type": "Language",
+    "rules": [
+      {
+        "location": "header",
+        "field": "X-Powered-By",
+        "match": ["Phusion Passenger"]
+      },
+      {
+        "location": "header",
+        "field": "X-Rack-Cache",
+        "match": [".+"]
+      },
+      {
+        "location": "header",
+        "field": "Set-Cookie",
+        "match": ["_session_id", "_rails_session"]
+      }
+    ]
+  },
+  {
+    "name": "Go",
+    "type": "Language",
+    "rules": [
+      {
+        "location": "header",
+        "field": "X-Go-Version",
+        "match": [".+"]
+      },
+      {
+        "location": "body",
+        "match": ["Go-http-client", "golang.org"]
+      }
+    ]
+  },
+  {
+    "name": "Rust",
+    "type": "Language",
+    "rules": [
+      {
+        "location": "header",
+        "field": "X-Powered-By",
+        "match": ["Rocket"]
+      },
+      {
+        "location": "header",
+        "field": "Server",
+        "match": ["actix-web"]
+      }
+    ]
+  },
+  {
+    "name": "UEditor",
+    "type": "Editor",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "ueditor.config.js",
+          "ueditor.all.js"
+        ]
+      },
+      {
+        "location": "body",
+        "path": "/ueditor/net/controller.ashx?action=catchimage",
+        "match": ["action", "state"],
+        "description": "Potential Arbitrary File Upload (.NET)"
+      },
+      {
+        "location": "body",
+        "path": "/ueditor/php/controller.php?action=catchimage",
+        "match": ["action", "state"],
+        "description": "Potential SSRF/File Upload (PHP)"
+      },
+      {
+        "location": "body",
+        "path": "/ueditor/jsp/controller.jsp?action=catchimage",
+        "match": ["action", "state"],
+        "description": "Potential SSRF (JSP)"
+      }
+    ]
+  },
+  {
+    "name": "eWebEditor",
+    "type": "Editor",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "ewebeditor.asp",
+          "ewebeditor.js",
+          "eWebEditor_System"
+        ]
+      },
+      {
+        "location": "body",
+        "path": "/ewebeditor/admin_login.asp",
+        "match": ["Admin_Login", "eWebEditor"],
+        "description": "Admin Login Page"
+      },
+      {
+        "location": "body",
+        "path": "/db/ewebeditor.mdb",
+        "match": ["Standard Jet DB"],
+        "description": "Database Download"
+      }
+    ]
+  },
+  {
+    "name": "FCKeditor",
+    "type": "Editor",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "fckeditor.js",
+          "fckconfig.js",
+          "FCKeditorAPI"
+        ]
+      },
+      {
+        "location": "body",
+        "path": "/fckeditor/editor/filemanager/connectors/test.html",
+        "match": ["FCKeditor", "Connector"],
+        "description": "Connector Test Page"
+      }
+    ]
+  },
+  {
+    "name": "KindEditor",
+    "type": "Editor",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "kindeditor-min.js",
+          "kindeditor.js",
+          "KindEditor.ready"
+        ]
+      },
+      {
+        "location": "body",
+        "path": "/kindeditor/php/upload_json.php",
+        "match": ["error", "url"],
+        "description": "Potential File Upload Point"
+      }
+    ]
+  },
+  {
+    "name": "CKEditor",
+    "type": "Editor",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "ckeditor.js",
+          "CKEDITOR.replace",
+          "ckeditor/config.js"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Vue.js",
+    "type": "Framework",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "v-cloak",
+          "__vue__",
+          "vue.js",
+          "vue.min.js"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Element UI",
+    "type": "Component Library",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "el-table",
+          "el-button",
+          "el-input",
+          "element-ui"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Next.js",
+    "type": "Framework",
+    "rules": [
+      {
+        "location": "header",
+        "field": "X-Powered-By",
+        "match": ["Next\\.js"]
+      },
+      {
+        "location": "body",
+        "match": [
+          "/_next/static/",
+          "__NEXT_DATA__",
+          "id=\"__next\""
+        ]
+      },
+      {
+        "location": "header",
+        "field": "Vary",
+        "match": ["RSC", "Next-Router-State-Tree"]
+      }
+    ]
+  },
+  {
+    "name": "seeyon",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "/seeyon/USER-DATA/IMAGES/LOGIN/login.gif"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "/seeyon/common/"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "微三云管理系统",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "WSY_logo",
+          "管理系统 MANAGEMENT SYSTEM"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Sangfor SSL VPN",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "/por/login_psw.csp"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "loginPageSP/loginPrivacy.js"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "e-mobile",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "weaver,e-mobile"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ecology",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "header",
+        "match": [
+          "ecology_JSessionid"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "泛微云桥 e-Bridge",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "wx.weaver"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "e-Bridge"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "泛微 OA",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1578525679"
+      }
+    ]
+  },
+  {
+    "name": "Swagger UI",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "Swagger UI"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Ruijie",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "4008 111 000"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Huawei SMC",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "Script/SmcScript.js?version="
+        ]
+      }
+    ]
+  },
+  {
+    "name": "H3C Router",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "/wnm/ssl/web/frame/login.html"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Cisco SSLVPN",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "/+CSCOE+/logon.html"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "通达OA",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "/images/tongda.ico"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "Office Anywhere"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "通达OA",
+          "login"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "深信服 waf",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "rsa.js",
+          "commonFunction.js"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "Redirect to...",
+          "/LogInOut.php"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "网御 vpn",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "/vpn/common/js/leadsec.js",
+          "/vpn/user/common/custom/auth_home.css"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "启明星辰天清汉马USG防火墙",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "/cgi-bin/webui?op=get_product_model"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "天清汉马USG"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "蓝凌 OA",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "sys/ui/extend/theme/default/style/icon.css",
+          "sys/ui/extend/theme/default/style/profile.css"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "深信服上网行为管理系统",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "utccjfaewjb = function(str, key)"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "document.write(WRFWWCSFBXMIGKRKHXFJ"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "深信服应用交付报表系统",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "/reportCenter/index.php?cls_mode=cluster_mode_others"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "群晖 NAS",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "Synology",
+          "webman/"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "DiskStation",
+          "webman/modules",
+          "NAS"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "金蝶云星空",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "HTML5/content/themes/kdcss.min.css"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "/ClientBin/Kingdee.BOS.XPF.App.xap"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "CoreMail",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "coremail/common"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Gitlab",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "assets/gitlab_logo"
+        ]
+      },
+      {
+        "location": "hash",
+        "hash": "1278323681"
+      },
+      {
+        "location": "hash",
+        "hash": "516963061"
+      }
+    ]
+  },
+  {
+    "name": "宝塔-BT.cn",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "入口校验失败"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "没有找到站点",
+          "可能原因",
+          "CDN产品",
+          "Web服务",
+          "检查端口是否正确"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "<title>恭喜，站点创建成功",
+          "面板系统后台",
+          "系统自动生成"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "扫码登录更安全",
+          "bt.cn",
+          "/login"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "站点创建成功",
+          "bt.cn"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "站点创建成功",
+          "宝塔"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "宝塔Linux面板"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "DouPHP",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "Powered by DouPHP",
+          "DouPHP",
+          "theme"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "禅道",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "self.location",
+          "Lw=="
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "/theme/default/images/main/zt-logo.png"
+        ]
+      },
+      {
+        "location": "header",
+        "match": [
+          "zentaosid"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "用友软件",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "UFIDA Software CO.LTD all rights reserved"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "用友NC",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "logo/images/ufida_nc.png",
+          "用友NC"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "YONYOU NC",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "uclient.yonyou.com",
+          "UClient"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "RabbitMQ",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "<title>RabbitMQ Management</title>"
+        ]
+      },
+      {
+        "location": "hash",
+        "hash": "1064742722"
+      }
+    ]
+  },
+  {
+    "name": "Zabbix",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "zabbix",
+          "Zabbix SIA"
+        ]
+      },
+      {
+        "location": "hash",
+        "hash": "892542951"
+      }
+    ]
+  },
+  {
+    "name": "联软准入",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "网络准入",
+          "leagsoft",
+          "redirect"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "列目录",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "Index of /"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          " - /</title>"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "浪潮服务器IPMI管理口",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "img/inspur_logo.png",
+          "Management System"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "RegentApi_v2.0",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "RegentApi_v2.0"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "slack-instance",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "99395752"
+      }
+    ]
+  },
+  {
+    "name": "Jenkins",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "81586312"
+      }
+    ]
+  },
+  {
+    "name": "Cnservers LLC",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-235701012"
+      }
+    ]
+  },
+  {
+    "name": "Atlassian",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "743365239"
+      },
+      {
+        "location": "hash",
+        "hash": "628535358"
+      },
+      {
+        "location": "hash",
+        "hash": "705143395"
+      }
+    ]
+  },
+  {
+    "name": "Chainpoint",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "2128230701"
+      }
+    ]
+  },
+  {
+    "name": "LaCie",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1277814690"
+      }
+    ]
+  },
+  {
+    "name": "Parse",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "246145559"
+      }
+    ]
+  },
+  {
+    "name": "JIRA",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "855273746"
+      }
+    ]
+  },
+  {
+    "name": "Avigilon",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1318124267"
+      }
+    ]
+  },
+  {
+    "name": "Atlassian – Confluence",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-305179312"
+      },
+      {
+        "location": "hash",
+        "hash": "-1642532491"
+      }
+    ]
+  },
+  {
+    "name": "OpenStack",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "786533217"
+      },
+      {
+        "location": "hash",
+        "hash": "-923088984"
+      },
+      {
+        "location": "hash",
+        "hash": "1232596212"
+      }
+    ]
+  },
+  {
+    "name": "Pi Star",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "432733105"
+      }
+    ]
+  },
+  {
+    "name": "XAMPP",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1275226814"
+      },
+      {
+        "location": "hash",
+        "hash": "-1437701105"
+      }
+    ]
+  },
+  {
+    "name": "Atlassian – JIRA",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "981867722"
+      },
+      {
+        "location": "hash",
+        "hash": "552727997"
+      },
+      {
+        "location": "hash",
+        "hash": "-1581907337"
+      }
+    ]
+  },
+  {
+    "name": "Aplikasi",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "494866796"
+      }
+    ]
+  },
+  {
+    "name": "Ubiquiti Aircube",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1249285083"
+      }
+    ]
+  },
+  {
+    "name": "Atlassian – Bamboo",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1379982221"
+      }
+    ]
+  },
+  {
+    "name": "Exostar – Managed Access Gateway",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "420473080"
+      }
+    ]
+  },
+  {
+    "name": "Cisco Meraki",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "163842882"
+      }
+    ]
+  },
+  {
+    "name": "Archivematica",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1378182799"
+      }
+    ]
+  },
+  {
+    "name": "TCN",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-702384832"
+      }
+    ]
+  },
+  {
+    "name": "CX",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-532394952"
+      }
+    ]
+  },
+  {
+    "name": "Ace",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-183163807"
+      }
+    ]
+  },
+  {
+    "name": "NetData",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1302486561"
+      }
+    ]
+  },
+  {
+    "name": "OpenGeo Suite",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-609520537"
+      }
+    ]
+  },
+  {
+    "name": "Dgraph Ratel",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1961046099"
+      }
+    ]
+  },
+  {
+    "name": "Material Dashboard",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1913538826"
+      }
+    ]
+  },
+  {
+    "name": "Form.io",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1319699698"
+      }
+    ]
+  },
+  {
+    "name": "Kubeflow",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1203021870"
+      }
+    ]
+  },
+  {
+    "name": "netdata dashboard",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-182423204"
+      },
+      {
+        "location": "hash",
+        "hash": "1585145626"
+      }
+    ]
+  },
+  {
+    "name": "CapRover",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "988422585"
+      }
+    ]
+  },
+  {
+    "name": "WiJungle",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "2113497004"
+      }
+    ]
+  },
+  {
+    "name": "Onera",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1234311970"
+      }
+    ]
+  },
+  {
+    "name": "SmartPing",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "430582574"
+      }
+    ]
+  },
+  {
+    "name": "FRITZ!Box",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-219752612"
+      }
+    ]
+  },
+  {
+    "name": "fortinet-forticlient",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "945408572"
+      }
+    ]
+  },
+  {
+    "name": "Ubiquiti – AirOS",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-697231354"
+      },
+      {
+        "location": "hash",
+        "hash": "1020814938"
+      }
+    ]
+  },
+  {
+    "name": "Fortinet – Forticlient",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "945408572"
+      }
+    ]
+  },
+  {
+    "name": "Outlook Web Application",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1768726119"
+      },
+      {
+        "location": "hash",
+        "hash": "1356662359"
+      }
+    ]
+  },
+  {
+    "name": "Huawei – Claro",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "2109473187"
+      }
+    ]
+  },
+  {
+    "name": "ASUS AiCloud",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "552592949"
+      }
+    ]
+  },
+  {
+    "name": "SonicWALL",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "631108382"
+      }
+    ]
+  },
+  {
+    "name": "Google",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "708578229"
+      }
+    ]
+  },
+  {
+    "name": "Plesk",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-134375033"
+      },
+      {
+        "location": "hash",
+        "hash": "-1050786453"
+      },
+      {
+        "location": "hash",
+        "hash": "-981606721"
+      }
+    ]
+  },
+  {
+    "name": "Dahua Storm (IP Camera)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "2019488876"
+      },
+      {
+        "location": "hash",
+        "hash": "833190513"
+      }
+    ]
+  },
+  {
+    "name": "Huawei – ADSL/Router",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1395400951"
+      }
+    ]
+  },
+  {
+    "name": "Sophos Cyberoam (appliance)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1601194732"
+      }
+    ]
+  },
+  {
+    "name": "LANCOM Systems",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-325082670"
+      }
+    ]
+  },
+  {
+    "name": "TilginAB (HomeGateway)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1346447358"
+      }
+    ]
+  },
+  {
+    "name": "Supermicro Intelligent Management (IPMI)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1410610129"
+      }
+    ]
+  },
+  {
+    "name": "Zyxel ZyWALL",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-440644339"
+      },
+      {
+        "location": "hash",
+        "hash": "-484708885"
+      }
+    ]
+  },
+  {
+    "name": "Dell SonicWALL",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "363324987"
+      }
+    ]
+  },
+  {
+    "name": "Ubiquiti Login Portals",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1446794564"
+      }
+    ]
+  },
+  {
+    "name": "Sophos User Portal/VPN Portal",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1045696447"
+      }
+    ]
+  },
+  {
+    "name": "OpenVPN",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "396533629"
+      }
+    ]
+  },
+  {
+    "name": "Cyberoam",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1462981117"
+      }
+    ]
+  },
+  {
+    "name": "ASP.net favicon",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1772087922"
+      }
+    ]
+  },
+  {
+    "name": "Technicolor",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1594377337"
+      },
+      {
+        "location": "hash",
+        "hash": "-2138771289"
+      }
+    ]
+  },
+  {
+    "name": "Vodafone (Technicolor)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "165976831"
+      }
+    ]
+  },
+  {
+    "name": "UBNT Router UI",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1677255344"
+      }
+    ]
+  },
+  {
+    "name": "Intelbras Wireless",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-359621743"
+      }
+    ]
+  },
+  {
+    "name": "Kerio Connect (Webmail)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-677167908"
+      }
+    ]
+  },
+  {
+    "name": "BIG-IP",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "878647854"
+      }
+    ]
+  },
+  {
+    "name": "Microsoft OWA",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "442749392"
+      }
+    ]
+  },
+  {
+    "name": "pfSense",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1405460984"
+      },
+      {
+        "location": "hash",
+        "hash": "1015545776"
+      }
+    ]
+  },
+  {
+    "name": "iKuai Networks",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-271448102"
+      }
+    ]
+  },
+  {
+    "name": "Dlink Webcam",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "31972968"
+      },
+      {
+        "location": "hash",
+        "hash": "-1354933624"
+      },
+      {
+        "location": "hash",
+        "hash": "1221759509"
+      },
+      {
+        "location": "hash",
+        "hash": "1144925962"
+      }
+    ]
+  },
+  {
+    "name": "3CX Phone System",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "970132176"
+      }
+    ]
+  },
+  {
+    "name": "Bluehost",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1119613926"
+      }
+    ]
+  },
+  {
+    "name": "Sangfor",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "123821839"
+      },
+      {
+        "location": "hash",
+        "hash": "-1810847295"
+      },
+      {
+        "location": "hash",
+        "hash": "-1926484046"
+      }
+    ]
+  },
+  {
+    "name": "ZTE Corporation (Gateway/Appliance)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "459900502"
+      }
+    ]
+  },
+  {
+    "name": "Ruckus Wireless",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-2069844696"
+      }
+    ]
+  },
+  {
+    "name": "Bitnami",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1607644090"
+      }
+    ]
+  },
+  {
+    "name": "Juniper Device Manager",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "2141724739"
+      }
+    ]
+  },
+  {
+    "name": "Technicolor Gateway",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1835479497"
+      }
+    ]
+  },
+  {
+    "name": "NETASQ - Secure / Stormshield",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1929912510"
+      }
+    ]
+  },
+  {
+    "name": "VMware Horizon",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1255992602"
+      },
+      {
+        "location": "hash",
+        "hash": "1895360511"
+      },
+      {
+        "location": "hash",
+        "hash": "-991123252"
+      }
+    ]
+  },
+  {
+    "name": "Vmware Secure File Transfer",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1642701741"
+      }
+    ]
+  },
+  {
+    "name": "SAP Netweaver",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-266008933"
+      }
+    ]
+  },
+  {
+    "name": "SAP ID Service: Log On",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1967743928"
+      }
+    ]
+  },
+  {
+    "name": "SAP Conversational AI",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1347937389"
+      }
+    ]
+  },
+  {
+    "name": "Palo Alto Login Portal",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "602431586"
+      }
+    ]
+  },
+  {
+    "name": "Palo Alto Networks",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-318947884"
+      }
+    ]
+  },
+  {
+    "name": "Webmin",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1453890729"
+      },
+      {
+        "location": "hash",
+        "hash": "-1038557304"
+      },
+      {
+        "location": "hash",
+        "hash": "1280907310"
+      },
+      {
+        "location": "hash",
+        "hash": "479413330"
+      },
+      {
+        "location": "body",
+        "match": [
+          "Webmin",
+          "session_login"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Docker",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1814887000"
+      },
+      {
+        "location": "hash",
+        "hash": "1937209448"
+      }
+    ]
+  },
+  {
+    "name": "Amazon",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1544605732"
+      },
+      {
+        "location": "hash",
+        "hash": "716989053"
+      }
+    ]
+  },
+  {
+    "name": "phpMyAdmin",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1010568750"
+      },
+      {
+        "location": "hash",
+        "hash": "-476231906"
+      }
+    ]
+  },
+  {
+    "name": "Zhejiang Uniview Technologies Co.",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1240222446"
+      }
+    ]
+  },
+  {
+    "name": "ISP Manager",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-986678507"
+      }
+    ]
+  },
+  {
+    "name": "AXIS (network cameras)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1616143106"
+      }
+    ]
+  },
+  {
+    "name": "Roundcube Webmail",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-976235259"
+      }
+    ]
+  },
+  {
+    "name": "UniFi Video Controller (airVision)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "768816037"
+      }
+    ]
+  },
+  {
+    "name": "Freebox OS",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1838417872"
+      }
+    ]
+  },
+  {
+    "name": "Keenetic",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "547282364"
+      }
+    ]
+  },
+  {
+    "name": "Sierra Wireless Ace Manager (Airlink)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1571472432"
+      }
+    ]
+  },
+  {
+    "name": "Synology DiskStation",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "149371702"
+      }
+    ]
+  },
+  {
+    "name": "INSTAR IP Cameras",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1169314298"
+      }
+    ]
+  },
+  {
+    "name": "Octoprint (3D printer)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1307375944"
+      }
+    ]
+  },
+  {
+    "name": "Vesta Hosting Control Panel",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1954835352"
+      }
+    ]
+  },
+  {
+    "name": "Farming Simulator Dedicated Server",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "509789953"
+      }
+    ]
+  },
+  {
+    "name": "Residential Gateway",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1933493443"
+      }
+    ]
+  },
+  {
+    "name": "cPanel Login",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1993518473"
+      },
+      {
+        "location": "hash",
+        "hash": "1544230796"
+      },
+      {
+        "location": "hash",
+        "hash": "1244636413"
+      }
+    ]
+  },
+  {
+    "name": "Arris",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1477563858"
+      }
+    ]
+  },
+  {
+    "name": "PLEX Server",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-895890586"
+      }
+    ]
+  },
+  {
+    "name": "Deluge",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "944969688"
+      }
+    ]
+  },
+  {
+    "name": "Cambium Networks",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-435817905"
+      }
+    ]
+  },
+  {
+    "name": "Parallels Plesk Panel",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-652508439"
+      },
+      {
+        "location": "hash",
+        "hash": "-519765377"
+      },
+      {
+        "location": "hash",
+        "hash": "-771764544"
+      }
+    ]
+  },
+  {
+    "name": "Fireware Watchguard",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-569941107"
+      }
+    ]
+  },
+  {
+    "name": "Shock&Innovation!! netis setup",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1326164945"
+      }
+    ]
+  },
+  {
+    "name": "cacaoweb",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1738184811"
+      }
+    ]
+  },
+  {
+    "name": "Loxone (Automation)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "904434662"
+      }
+    ]
+  },
+  {
+    "name": "HP Printer / Server",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "905744673"
+      },
+      {
+        "location": "hash",
+        "hash": "-2144363468"
+      }
+    ]
+  },
+  {
+    "name": "Netflix",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "902521196"
+      }
+    ]
+  },
+  {
+    "name": "Linksys Smart Wi-Fi",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-2063036701"
+      }
+    ]
+  },
+  {
+    "name": "lwIP (A Lightweight TCP/IP stack)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1205024243"
+      }
+    ]
+  },
+  {
+    "name": "Hitron Technologies",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "607846949"
+      }
+    ]
+  },
+  {
+    "name": "Dahua Storm (DVR)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1281253102"
+      }
+    ]
+  },
+  {
+    "name": "MOBOTIX Camera",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "661332347"
+      }
+    ]
+  },
+  {
+    "name": "Blue Iris (Webcam)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-520888198"
+      }
+    ]
+  },
+  {
+    "name": "Vigor Router",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "104189364"
+      }
+    ]
+  },
+  {
+    "name": "Alibaba Cloud (Block Page)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1227052603"
+      }
+    ]
+  },
+  {
+    "name": "DD WRT (DD-WRT milli_httpd)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "252728887"
+      }
+    ]
+  },
+  {
+    "name": "Mitel Networks (MiCollab End User Portal)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1922044295"
+      }
+    ]
+  },
+  {
+    "name": "Dlink Router",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1037387972"
+      }
+    ]
+  },
+  {
+    "name": "PRTG Network Monitor",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-655683626"
+      }
+    ]
+  },
+  {
+    "name": "Elastic (Database)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1611729805"
+      },
+      {
+        "location": "hash",
+        "hash": "1552860581"
+      }
+    ]
+  },
+  {
+    "name": "Wildfly",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1666561833"
+      }
+    ]
+  },
+  {
+    "name": "Cisco Meraki Dashboard",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "804949239"
+      }
+    ]
+  },
+  {
+    "name": "Workday",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-459291760"
+      }
+    ]
+  },
+  {
+    "name": "JustHost",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1734609466"
+      }
+    ]
+  },
+  {
+    "name": "Baidu (IP error page)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1507567067"
+      }
+    ]
+  },
+  {
+    "name": "Intelbras SA",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "2006716043"
+      },
+      {
+        "location": "hash",
+        "hash": "283740897"
+      },
+      {
+        "location": "hash",
+        "hash": "-1343070146"
+      }
+    ]
+  },
+  {
+    "name": "Yii PHP Framework (Default Favicon)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1298108480"
+      }
+    ]
+  },
+  {
+    "name": "truVision NVR (interlogix)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1782271534"
+      }
+    ]
+  },
+  {
+    "name": "Redmine",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "603314"
+      }
+    ]
+  },
+  {
+    "name": "Cisco (eg:Conference Room Login Page)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-646322113"
+      }
+    ]
+  },
+  {
+    "name": "Luma Surveillance",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1351901211"
+      }
+    ]
+  },
+  {
+    "name": "Metasploit",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-127886975"
+      },
+      {
+        "location": "hash",
+        "hash": "1139788073"
+      },
+      {
+        "location": "hash",
+        "hash": "-1235192469"
+      },
+      {
+        "location": "hash",
+        "hash": "579239725"
+      }
+    ]
+  },
+  {
+    "name": "ALIBI NVR",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1876585825"
+      }
+    ]
+  },
+  {
+    "name": "Websockets test page (eg: port 5900)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-291579889"
+      }
+    ]
+  },
+  {
+    "name": "macOS Server (Apple)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1629518721"
+      }
+    ]
+  },
+  {
+    "name": "OpenRG",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-986816620"
+      }
+    ]
+  },
+  {
+    "name": "Cisco Router",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-299287097"
+      }
+    ]
+  },
+  {
+    "name": "HeroSpeed Digital Technology Co. (NVR/IPC/XVR)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-873627015"
+      }
+    ]
+  },
+  {
+    "name": "Nomadix Access Gateway",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "2071993228"
+      }
+    ]
+  },
+  {
+    "name": "Magento",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-38580010"
+      }
+    ]
+  },
+  {
+    "name": "MK-AUTH",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1490343308"
+      }
+    ]
+  },
+  {
+    "name": "Shoutcast Server",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-632583950"
+      }
+    ]
+  },
+  {
+    "name": "FireEye",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "95271369"
+      },
+      {
+        "location": "hash",
+        "hash": "1476335317"
+      },
+      {
+        "location": "hash",
+        "hash": "-842192932"
+      },
+      {
+        "location": "hash",
+        "hash": "105083909"
+      },
+      {
+        "location": "hash",
+        "hash": "240606739"
+      },
+      {
+        "location": "hash",
+        "hash": "2121539357"
+      }
+    ]
+  },
+  {
+    "name": "Adobe Campaign Classic",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-333791179"
+      }
+    ]
+  },
+  {
+    "name": "Niagara Web Server",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-676077969"
+      }
+    ]
+  },
+  {
+    "name": "Hitron Technologies Inc.",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "711742418"
+      }
+    ]
+  },
+  {
+    "name": "IBM Notes",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "728788645"
+      }
+    ]
+  },
+  {
+    "name": "Barracuda",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1436966696"
+      }
+    ]
+  },
+  {
+    "name": "ServiceNow",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "86919334"
+      }
+    ]
+  },
+  {
+    "name": "Openfire Admin Console",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1211608009"
+      }
+    ]
+  },
+  {
+    "name": "HP iLO",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "2059618623"
+      }
+    ]
+  },
+  {
+    "name": "Sunny WebBox",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1975413433"
+      }
+    ]
+  },
+  {
+    "name": "ZyXEL",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "943925975"
+      }
+    ]
+  },
+  {
+    "name": "Huawei",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "281559989"
+      }
+    ]
+  },
+  {
+    "name": "Tenda Web Master",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-2145085239"
+      }
+    ]
+  },
+  {
+    "name": "Prometheus Time Series Collection and Processing Server",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1399433489"
+      }
+    ]
+  },
+  {
+    "name": "wdCP 云主机面板",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1786752597"
+      }
+    ]
+  },
+  {
+    "name": "Domoticz (Home Automation)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "90680708"
+      }
+    ]
+  },
+  {
+    "name": "Tableau",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1441956789"
+      }
+    ]
+  },
+  {
+    "name": "openWRT Luci",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-675839242"
+      },
+      {
+        "location": "hash",
+        "hash": "1941381095"
+      }
+    ]
+  },
+  {
+    "name": "MDaemon Webmail",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-766957661"
+      }
+    ]
+  },
+  {
+    "name": "Teltonika",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "119741608"
+      },
+      {
+        "location": "hash",
+        "hash": "-1612496354"
+      }
+    ]
+  },
+  {
+    "name": "Entrolink",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1973665246"
+      }
+    ]
+  },
+  {
+    "name": "WindRiver-WebServer",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "74935566"
+      }
+    ]
+  },
+  {
+    "name": "Microhard Systems",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1723752240"
+      }
+    ]
+  },
+  {
+    "name": "Skype",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1807411396"
+      }
+    ]
+  },
+  {
+    "name": "Eltex (Router)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1877797890"
+      }
+    ]
+  },
+  {
+    "name": "bintec elmeg",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-375623619"
+      },
+      {
+        "location": "hash",
+        "hash": "1770799630"
+      }
+    ]
+  },
+  {
+    "name": "SyncThru Web Service (Printers)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1483097076"
+      }
+    ]
+  },
+  {
+    "name": "BoaServer",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1169183049"
+      }
+    ]
+  },
+  {
+    "name": "Securepoint",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1051648103"
+      }
+    ]
+  },
+  {
+    "name": "Moodle",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-438482901"
+      }
+    ]
+  },
+  {
+    "name": "RADIX",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1492966240"
+      }
+    ]
+  },
+  {
+    "name": "CradlePoint Technology (Router)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1466912879"
+      }
+    ]
+  },
+  {
+    "name": "Drupal",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-167656799"
+      },
+      {
+        "location": "hash",
+        "hash": "1174841451"
+      }
+    ]
+  },
+  {
+    "name": "Blackboard",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1593651747"
+      }
+    ]
+  },
+  {
+    "name": "Jupyter Notebook",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-895963602"
+      }
+    ]
+  },
+  {
+    "name": "HostMonster - Web hosting",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-972810761"
+      }
+    ]
+  },
+  {
+    "name": "D-Link (router/network)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1703788174"
+      },
+      {
+        "location": "hash",
+        "hash": "517158172"
+      },
+      {
+        "location": "hash",
+        "hash": "1038500535"
+      }
+    ]
+  },
+  {
+    "name": "Rocket Chat",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "225632504"
+      }
+    ]
+  },
+  {
+    "name": "mofinetwork",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1702393021"
+      }
+    ]
+  },
+  {
+    "name": "TOTOLINK (network)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "547474373"
+      }
+    ]
+  },
+  {
+    "name": "Ossia (Provision SR) | Webcam/IP Camera",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-374235895"
+      }
+    ]
+  },
+  {
+    "name": "Jeedom (home automation)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "462223993"
+      }
+    ]
+  },
+  {
+    "name": "Niagara Web Server / Tridium",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1991562061"
+      }
+    ]
+  },
+  {
+    "name": "Solarwinds Serv-U FTP Server",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "812385209"
+      }
+    ]
+  },
+  {
+    "name": "Aruba (Virtual Controller)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1142227528"
+      }
+    ]
+  },
+  {
+    "name": "Dell",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1153950306"
+      }
+    ]
+  },
+  {
+    "name": "RemObjects SDK / Remoting SDK for .NET HTTP Server Microsoft",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "72005642"
+      }
+    ]
+  },
+  {
+    "name": "VisualSVN Server",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "706602230"
+      }
+    ]
+  },
+  {
+    "name": "STARFACE VoIP Software",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-332324409"
+      }
+    ]
+  },
+  {
+    "name": "Netis (network devices)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-594256627"
+      }
+    ]
+  },
+  {
+    "name": "WHM",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-649378830"
+      }
+    ]
+  },
+  {
+    "name": "Tandberg",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "97604680"
+      }
+    ]
+  },
+  {
+    "name": "Ghost (CMS)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1015932800"
+      },
+      {
+        "location": "hash",
+        "hash": "-1231681737"
+      }
+    ]
+  },
+  {
+    "name": "Avtech IP Surveillance (Camera)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-194439630"
+      }
+    ]
+  },
+  {
+    "name": "Liferay Portal",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "129457226"
+      }
+    ]
+  },
+  {
+    "name": "Odoo",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-617743584"
+      }
+    ]
+  },
+  {
+    "name": "Polycom",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "77044418"
+      }
+    ]
+  },
+  {
+    "name": "Cake PHP",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "980692677"
+      }
+    ]
+  },
+  {
+    "name": "Exacq",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "476213314"
+      }
+    ]
+  },
+  {
+    "name": "CheckPoint",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "794809961"
+      }
+    ]
+  },
+  {
+    "name": "Ubiquiti UNMS",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1157789622"
+      }
+    ]
+  },
+  {
+    "name": "WorldClient for Mdaemon",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1985721423"
+      },
+      {
+        "location": "hash",
+        "hash": "-35107086"
+      }
+    ]
+  },
+  {
+    "name": "Netport Software (DSL)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1124868062"
+      }
+    ]
+  },
+  {
+    "name": "f5 Big IP",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-335242539"
+      }
+    ]
+  },
+  {
+    "name": "Mailcow",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "2146763496"
+      }
+    ]
+  },
+  {
+    "name": "QNAP NAS Virtualization Station",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1041180225"
+      }
+    ]
+  },
+  {
+    "name": "Netgear",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1319025408"
+      }
+    ]
+  },
+  {
+    "name": "Gogs",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "917966895"
+      }
+    ]
+  },
+  {
+    "name": "Trendnet IP camera",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "512590457"
+      }
+    ]
+  },
+  {
+    "name": "Asustor",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1678170702"
+      }
+    ]
+  },
+  {
+    "name": "Dahua",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1466785234"
+      }
+    ]
+  },
+  {
+    "name": "Discuz!",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-505448917"
+      },
+      {
+        "location": "body",
+        "match": [
+          "Discuz!",
+          "Comsenz",
+          "cache/"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "wdCP cloud host management system",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "255892555"
+      }
+    ]
+  },
+  {
+    "name": "Joomla",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1627330242"
+      },
+      {
+        "location": "hash",
+        "hash": "-1950415971"
+      },
+      {
+        "location": "hash",
+        "hash": "366524387"
+      }
+    ]
+  },
+  {
+    "name": "SmarterMail",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1935525788"
+      }
+    ]
+  },
+  {
+    "name": "Seafile",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-12700016"
+      }
+    ]
+  },
+  {
+    "name": "NETGEAR ReadyNAS",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-137295400"
+      }
+    ]
+  },
+  {
+    "name": "iPECS",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-195508437"
+      }
+    ]
+  },
+  {
+    "name": "bet365",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-2116540786"
+      }
+    ]
+  },
+  {
+    "name": "Reolink",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-38705358"
+      }
+    ]
+  },
+  {
+    "name": "idera",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-450254253"
+      }
+    ]
+  },
+  {
+    "name": "Proofpoint",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1630354993"
+      }
+    ]
+  },
+  {
+    "name": "Kerio Connect WebMail",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1678298769"
+      }
+    ]
+  },
+  {
+    "name": "Realtek",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "2055322029"
+      }
+    ]
+  },
+  {
+    "name": "Ruijie Networks (Login)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-692947551"
+      }
+    ]
+  },
+  {
+    "name": "Askey Cable Modem",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1710631084"
+      },
+      {
+        "location": "hash",
+        "hash": "89321398"
+      }
+    ]
+  },
+  {
+    "name": "JAWS Web Server (IP Camera)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "90066852"
+      },
+      {
+        "location": "hash",
+        "hash": "768231242"
+      }
+    ]
+  },
+  {
+    "name": "Homegrown Website Hosting",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-421986013"
+      }
+    ]
+  },
+  {
+    "name": "Technicolor / Thomson Speedtouch (Network / ADSL)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "156312019"
+      }
+    ]
+  },
+  {
+    "name": "DVR (Korean)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-560297467"
+      }
+    ]
+  },
+  {
+    "name": "TP-LINK (Network Device)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1842351293"
+      },
+      {
+        "location": "hash",
+        "hash": "1274078387"
+      }
+    ]
+  },
+  {
+    "name": "Salesforce",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1433417005"
+      }
+    ]
+  },
+  {
+    "name": "Untangle",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1103599349"
+      }
+    ]
+  },
+  {
+    "name": "Shenzhen coship electronics co.",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "224536051"
+      }
+    ]
+  },
+  {
+    "name": "D-Link (camera)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-355305208"
+      },
+      {
+        "location": "hash",
+        "hash": "-1897829998"
+      }
+    ]
+  },
+  {
+    "name": "Kibana",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-267431135"
+      },
+      {
+        "location": "hash",
+        "hash": "-759754862"
+      },
+      {
+        "location": "hash",
+        "hash": "-1200737715"
+      },
+      {
+        "location": "hash",
+        "hash": "75230260"
+      },
+      {
+        "location": "hash",
+        "hash": "1668183286"
+      }
+    ]
+  },
+  {
+    "name": "Icecast Streaming Media Server",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1424295654"
+      }
+    ]
+  },
+  {
+    "name": "NEC WebPro",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1922032523"
+      }
+    ]
+  },
+  {
+    "name": "Vivotek (Camera)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1654229048"
+      }
+    ]
+  },
+  {
+    "name": "Univention Portal",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1697334194"
+      }
+    ]
+  },
+  {
+    "name": "Portainer (Docker Management)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1424036600"
+      }
+    ]
+  },
+  {
+    "name": "NOS Router",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-831826827"
+      }
+    ]
+  },
+  {
+    "name": "Tongda",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-759108386"
+      }
+    ]
+  },
+  {
+    "name": "CrushFTP",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1022206565"
+      }
+    ]
+  },
+  {
+    "name": "Endian Firewall",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1225484776"
+      }
+    ]
+  },
+  {
+    "name": "Kerio Control Firewall",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-631002664"
+      },
+      {
+        "location": "hash",
+        "hash": "-466504476"
+      }
+    ]
+  },
+  {
+    "name": "Ferozo Panel",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "2072198544"
+      }
+    ]
+  },
+  {
+    "name": "Cafe24 (Korea)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1251810433"
+      }
+    ]
+  },
+  {
+    "name": "Mautic (Open Source Marketing Automation)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1273982002"
+      }
+    ]
+  },
+  {
+    "name": "NETIASPOT (Network)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-978656757"
+      }
+    ]
+  },
+  {
+    "name": "Multilaser",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "916642917"
+      }
+    ]
+  },
+  {
+    "name": "Canvas LMS (Learning Management)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "575613323"
+      }
+    ]
+  },
+  {
+    "name": "IBM Server",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1726027799"
+      }
+    ]
+  },
+  {
+    "name": "ADB Broadband S.p.A. (Network)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-587741716"
+      }
+    ]
+  },
+  {
+    "name": "ARRIS (Network)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-360566773"
+      }
+    ]
+  },
+  {
+    "name": "Huawei (Network)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-884776764"
+      },
+      {
+        "location": "hash",
+        "hash": "987967490"
+      }
+    ]
+  },
+  {
+    "name": "WAMPSERVER",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "929825723"
+      },
+      {
+        "location": "hash",
+        "hash": "443944613"
+      }
+    ]
+  },
+  {
+    "name": "Seagate Technology (NAS)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "240136437"
+      }
+    ]
+  },
+  {
+    "name": "UPC Ceska Republica (Network)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1911253822"
+      }
+    ]
+  },
+  {
+    "name": "Flussonic (Video Streaming)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-393788031"
+      }
+    ]
+  },
+  {
+    "name": "Metabase",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1953726032"
+      }
+    ]
+  },
+  {
+    "name": "D-Link (Network)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-2031183903"
+      },
+      {
+        "location": "hash",
+        "hash": "1081719753"
+      }
+    ]
+  },
+  {
+    "name": "MobileIron",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "545827989"
+      },
+      {
+        "location": "hash",
+        "hash": "967636089"
+      },
+      {
+        "location": "hash",
+        "hash": "362091310"
+      },
+      {
+        "location": "hash",
+        "hash": "2086228042"
+      }
+    ]
+  },
+  {
+    "name": "CommuniGate",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1588746893"
+      }
+    ]
+  },
+  {
+    "name": "ZTE (Network)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1427976651"
+      }
+    ]
+  },
+  {
+    "name": "InfiNet Wireless | WANFleX (Network)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1648531157"
+      }
+    ]
+  },
+  {
+    "name": "Mersive Solstice",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "938616453"
+      }
+    ]
+  },
+  {
+    "name": "Université Toulouse 1 Capitole",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1632780968"
+      }
+    ]
+  },
+  {
+    "name": "Digium (Switchvox)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "2068154487"
+      }
+    ]
+  },
+  {
+    "name": "PowerMTA monitoring",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1788112745"
+      }
+    ]
+  },
+  {
+    "name": "SmartLAN/G",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-644617577"
+      }
+    ]
+  },
+  {
+    "name": "Checkpoint (Gaia)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1822098181"
+      }
+    ]
+  },
+  {
+    "name": "УТМ (Federal Service for Alcohol Market Regulation | Russia)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1131689409"
+      }
+    ]
+  },
+  {
+    "name": "MailWizz",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "2127152956"
+      }
+    ]
+  },
+  {
+    "name": "openmediavault (NAS)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-693082538"
+      }
+    ]
+  },
+  {
+    "name": "Honeywell",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "903086190"
+      }
+    ]
+  },
+  {
+    "name": "BOMGAR Support Portal",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "829321644"
+      }
+    ]
+  },
+  {
+    "name": "Nuxt JS",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1442789563"
+      }
+    ]
+  },
+  {
+    "name": "RoundCube Webmail",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-2140379067"
+      }
+    ]
+  },
+  {
+    "name": "Netgear (Network)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1047213685"
+      }
+    ]
+  },
+  {
+    "name": "SonarQube",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1485257654"
+      }
+    ]
+  },
+  {
+    "name": "Lupus Electronics XT",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-299324825"
+      }
+    ]
+  },
+  {
+    "name": "Vanderbilt SPC",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1162730477"
+      }
+    ]
+  },
+  {
+    "name": "VZPP Plesk",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1268095485"
+      }
+    ]
+  },
+  {
+    "name": "Baidu",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1118684072"
+      }
+    ]
+  },
+  {
+    "name": "ownCloud",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1616115760"
+      }
+    ]
+  },
+  {
+    "name": "Sentora",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-2054889066"
+      }
+    ]
+  },
+  {
+    "name": "Alfresco",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1333537166"
+      }
+    ]
+  },
+  {
+    "name": "Digital Keystone (DK)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-373674173"
+      }
+    ]
+  },
+  {
+    "name": "WISPR (Airlan)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-106646451"
+      }
+    ]
+  },
+  {
+    "name": "Synology VPN Plus",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1235070469"
+      }
+    ]
+  },
+  {
+    "name": "Sentry",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "2063428236"
+      }
+    ]
+  },
+  {
+    "name": "WatchGuard",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "15831193"
+      }
+    ]
+  },
+  {
+    "name": "Web Client Pro",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-956471263"
+      }
+    ]
+  },
+  {
+    "name": "Tecvoz",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1452159623"
+      },
+      {
+        "location": "hash",
+        "hash": "1059329877"
+      }
+    ]
+  },
+  {
+    "name": "MDaemon Remote Administration",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "99432374"
+      }
+    ]
+  },
+  {
+    "name": "Paradox IP Module",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "727253975"
+      }
+    ]
+  },
+  {
+    "name": "DokuWiki",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-630493013"
+      }
+    ]
+  },
+  {
+    "name": "Sails",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "552597979"
+      }
+    ]
+  },
+  {
+    "name": "FastPanel Hosting",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "774252049"
+      }
+    ]
+  },
+  {
+    "name": "C-Lodop",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-329747115"
+      }
+    ]
+  },
+  {
+    "name": "Jamf Pro Login",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1262005940"
+      }
+    ]
+  },
+  {
+    "name": "StruxureWare (Schneider Electric)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "979634648"
+      }
+    ]
+  },
+  {
+    "name": "Axcient Replibit Management Server",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "475379699"
+      }
+    ]
+  },
+  {
+    "name": "Twonky Server (Media Streaming)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-878891718"
+      }
+    ]
+  },
+  {
+    "name": "Windows Azure",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-2125083197"
+      }
+    ]
+  },
+  {
+    "name": "ISP Manager (Web Hosting Panel)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1151675028"
+      }
+    ]
+  },
+  {
+    "name": "JupyterHub",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1248917303"
+      }
+    ]
+  },
+  {
+    "name": "CenturyLink Modem GUI Login (eg: Technicolor)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1908556829"
+      }
+    ]
+  },
+  {
+    "name": "OPNsense",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1148190371"
+      }
+    ]
+  },
+  {
+    "name": "Ligowave (network)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1467395679"
+      }
+    ]
+  },
+  {
+    "name": "Rumpus",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1528414776"
+      }
+    ]
+  },
+  {
+    "name": "Spiceworks (panel)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-2117390767"
+      }
+    ]
+  },
+  {
+    "name": "TeamCity",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1944119648"
+      }
+    ]
+  },
+  {
+    "name": "INSTAR Full-HD IP-Camera",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1748763891"
+      }
+    ]
+  },
+  {
+    "name": "GPON Home Gateway",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "251106693"
+      }
+    ]
+  },
+  {
+    "name": "Alienvault",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1779611449"
+      }
+    ]
+  },
+  {
+    "name": "Arbor Networks",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1745552996"
+      }
+    ]
+  },
+  {
+    "name": "Accrisoft",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1275148624"
+      }
+    ]
+  },
+  {
+    "name": "Yasni",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-178685903"
+      }
+    ]
+  },
+  {
+    "name": "Slack",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-43161126"
+      }
+    ]
+  },
+  {
+    "name": "innovaphone",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "671221099"
+      }
+    ]
+  },
+  {
+    "name": "Shinobi (CCTV)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-10974981"
+      }
+    ]
+  },
+  {
+    "name": "Siemens OZW772",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-336242473"
+      }
+    ]
+  },
+  {
+    "name": "Lantronix (Spider)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "882208493"
+      }
+    ]
+  },
+  {
+    "name": "ClaimTime (Ramsell Public Health & Safety)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-687783882"
+      }
+    ]
+  },
+  {
+    "name": "Surfilter SSL VPN Portal",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-590892202"
+      }
+    ]
+  },
+  {
+    "name": "Kyocera (Printer)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-50306417"
+      }
+    ]
+  },
+  {
+    "name": "Lucee!",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "784872924"
+      }
+    ]
+  },
+  {
+    "name": "Ricoh",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1135165421"
+      }
+    ]
+  },
+  {
+    "name": "Handle Proxy",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "926501571"
+      }
+    ]
+  },
+  {
+    "name": "iomega NAS",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-689902428"
+      },
+      {
+        "location": "hash",
+        "hash": "-600508822"
+      },
+      {
+        "location": "hash",
+        "hash": "656868270"
+      },
+      {
+        "location": "hash",
+        "hash": "-2056503929"
+      },
+      {
+        "location": "hash",
+        "hash": "-1656695885"
+      },
+      {
+        "location": "hash",
+        "hash": "331870709"
+      },
+      {
+        "location": "hash",
+        "hash": "1241049726"
+      },
+      {
+        "location": "hash",
+        "hash": "998138196"
+      },
+      {
+        "location": "hash",
+        "hash": "322531336"
+      },
+      {
+        "location": "hash",
+        "hash": "-401934945"
+      },
+      {
+        "location": "hash",
+        "hash": "-613216179"
+      }
+    ]
+  },
+  {
+    "name": "Chef Automate",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-276759139"
+      }
+    ]
+  },
+  {
+    "name": "Gargoyle Router Management Utility",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1862132268"
+      }
+    ]
+  },
+  {
+    "name": "KeepItSafe Management Console",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1738727418"
+      }
+    ]
+  },
+  {
+    "name": "Entronix Energy Management Platform",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-368490461"
+      }
+    ]
+  },
+  {
+    "name": "OpenProject",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1836828108"
+      }
+    ]
+  },
+  {
+    "name": "Unified Management Console (Polycom)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1775553655"
+      }
+    ]
+  },
+  {
+    "name": "Moxapass ioLogik Remote Ethernet I/O Server ",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "381100274"
+      }
+    ]
+  },
+  {
+    "name": "HFS (HTTP File Server)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "2124459909"
+      },
+      {
+        "location": "hash",
+        "hash": "731374291"
+      }
+    ]
+  },
+  {
+    "name": "Traccar GPS tracking",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-335153896"
+      }
+    ]
+  },
+  {
+    "name": "IW",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "896412703"
+      }
+    ]
+  },
+  {
+    "name": "Wordpress Under Construction Icon",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "191654058"
+      }
+    ]
+  },
+  {
+    "name": "Combivox",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-342262483"
+      }
+    ]
+  },
+  {
+    "name": "NetComWireless (Network)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "5542029"
+      }
+    ]
+  },
+  {
+    "name": "truVision (NVR)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1093172228"
+      }
+    ]
+  },
+  {
+    "name": "SpamExperts",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1688698891"
+      }
+    ]
+  },
+  {
+    "name": "Sonatype Nexus Repository Manager",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1546574541"
+      }
+    ]
+  },
+  {
+    "name": "iDirect Canada (Network Management)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-256828986"
+      }
+    ]
+  },
+  {
+    "name": "OpenERP (now known as Odoo)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1966198264"
+      }
+    ]
+  },
+  {
+    "name": "PKP (OpenJournalSystems) Public Knowledge Project",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "2099342476"
+      }
+    ]
+  },
+  {
+    "name": "LiquidFiles",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "541087742"
+      }
+    ]
+  },
+  {
+    "name": "ZyXEL (Network)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-882760066"
+      }
+    ]
+  },
+  {
+    "name": "Universal Devices (UD)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "16202868"
+      }
+    ]
+  },
+  {
+    "name": "Gitea",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1969970750"
+      }
+    ]
+  },
+  {
+    "name": "TC-Group",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1734573358"
+      }
+    ]
+  },
+  {
+    "name": "Deluge Web UI",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1589842876"
+      }
+    ]
+  },
+  {
+    "name": "AMH 云主机面板",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1822002133"
+      }
+    ]
+  },
+  {
+    "name": "OTRS (Open Ticket Request System)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-2006308185"
+      }
+    ]
+  },
+  {
+    "name": "Bosch Security Systems (Camera)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1702769256"
+      }
+    ]
+  },
+  {
+    "name": "Node-RED",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "321591353"
+      }
+    ]
+  },
+  {
+    "name": "motionEye (camera)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-923693877"
+      }
+    ]
+  },
+  {
+    "name": "Saia Burgess Controls – PCD",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1547576879"
+      }
+    ]
+  },
+  {
+    "name": "Arcadyan o2 box (Network)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1479202414"
+      }
+    ]
+  },
+  {
+    "name": "Abilis (Network/Automation)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-166151761"
+      }
+    ]
+  },
+  {
+    "name": "Airwatch",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "321909464"
+      },
+      {
+        "location": "hash",
+        "hash": "-1153873472"
+      },
+      {
+        "location": "hash",
+        "hash": "1095915848"
+      },
+      {
+        "location": "hash",
+        "hash": "788771792"
+      },
+      {
+        "location": "hash",
+        "hash": "-1863663974"
+      }
+    ]
+  },
+  {
+    "name": "KeyHelp (Keyweb AG)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1267819858"
+      },
+      {
+        "location": "hash",
+        "hash": "726817668"
+      }
+    ]
+  },
+  {
+    "name": "GLPI",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1474875778"
+      }
+    ]
+  },
+  {
+    "name": "Netcom Technology",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "5471989"
+      }
+    ]
+  },
+  {
+    "name": "CradlePoint",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1457536113"
+      }
+    ]
+  },
+  {
+    "name": "MyASP",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-736276076"
+      }
+    ]
+  },
+  {
+    "name": "Lenel",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "538585915"
+      }
+    ]
+  },
+  {
+    "name": "OkoFEN Pellematic",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-625364318"
+      }
+    ]
+  },
+  {
+    "name": "SimpleHelp (Remote Support)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1117165781"
+      }
+    ]
+  },
+  {
+    "name": "GraphQL",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1067420240"
+      }
+    ]
+  },
+  {
+    "name": "DNN (CMS)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1465479343"
+      }
+    ]
+  },
+  {
+    "name": "Apple",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1232159009"
+      },
+      {
+        "location": "hash",
+        "hash": "1382324298"
+      },
+      {
+        "location": "hash",
+        "hash": "-1498185948"
+      }
+    ]
+  },
+  {
+    "name": "ISPConfig",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "483383992"
+      }
+    ]
+  },
+  {
+    "name": "Microsoft Outlook",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1249852061"
+      }
+    ]
+  },
+  {
+    "name": "Hikvision IP Camera",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "999357577"
+      }
+    ]
+  },
+  {
+    "name": "IP Camera",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "492290497"
+      }
+    ]
+  },
+  {
+    "name": "AfterLogicWebMail系统",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-194791768"
+      }
+    ]
+  },
+  {
+    "name": "B2Bbuilder",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "492941040"
+      }
+    ]
+  },
+  {
+    "name": "深信服下一代防火墙管理系统",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "123821839"
+      }
+    ]
+  },
+  {
+    "name": "深信服WEB防篡改管理系统",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "WEB防篡改",
+          "cgi-bin/tamper_admin.cgi"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "YApi 可视化接口管理平台",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "YApi",
+          "id=\"yapi\"",
+          "prd",
+          "可视化接口管理平台"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "JumpServer 堡垒机",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1162630024"
+      }
+    ]
+  },
+  {
+    "name": "WeiPHP",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "weiphp.css",
+          "weiphp",
+          "Public/static"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Nagios XI",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "Nagios XI",
+          "nagiosxi",
+          "Nagios"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ShowDoc",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1969934080"
+      }
+    ]
+  },
+  {
+    "name": "协达OA",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1850889691"
+      }
+    ]
+  },
+  {
+    "name": "山石网科 防火墙",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "Hillstone",
+          "licenseAggrement",
+          "GLOBAL_CONFIG.js"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "360天堤新一代智慧防火墙",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "360天堤",
+          "360",
+          "360防火墙"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "360网神防火墙系统",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "resources/image/logo_header.png",
+          "360",
+          "网神防火墙系统"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "网神SecGate 3600防火墙",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "网神SecGate",
+          "3600防火墙",
+          "css/lsec/login.css"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "蓝盾防火墙",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "蓝盾",
+          "Bluedon",
+          "default/js/act/login.js"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "LanProxy",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "LanProxy",
+          "password",
+          "lanproxy-config"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ManageEngine ADManager Plus",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "ADManager",
+          "Hashtable.js",
+          "ManageEngine"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "phpshe 商城系统",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "Powered by phpshe",
+          "include/js/global.js"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "骑士 74CMS",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "74cms",
+          "qscms.root",
+          "index.php"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Grafana",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "Grafana",
+          "login",
+          "grafana-app"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Canal Admin",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "Canal Admin",
+          "js/app"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "IBOS酷办公OA系统",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "IBOS",
+          "login-panel",
+          "loginsubmit"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "若依(RuoYi)-管理系统",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "ry-ui",
+          "username",
+          "rememberme"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "中新金盾信息安全管理系统",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "中新金盾信息安全管理系统",
+          "login",
+          "useusbkey"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "中成科信 综合管理平台",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1632964065"
+      }
+    ]
+  },
+  {
+    "name": "VMware vCenter",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "VMware",
+          "ID_VISDK",
+          "download"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "AWS S3 Bucket",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "InvalidBucketName",
+          "aliyuncs"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "网心云设备",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "网心云设备",
+          "favicon.png"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "深信服 NGAF",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "SANGFOR",
+          "NGAF",
+          "login"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "IBM HTTP Server",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "IBM HTTP Server",
+          "Support"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "nps",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "nps",
+          "ehang",
+          "login"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "群晖 DiskStation",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "DiskStation",
+          "文件服务器",
+          "modules"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "锐捷 SSLVPN",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "SSLVPN",
+          "rjweb",
+          "login"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "蜂网企业流控云路由器",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "ifw8",
+          "企业级流控云路由器",
+          "login"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "网御 安全网关",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "安全系统",
+          "网御星云",
+          "login"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Citrix Access Gateway",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "Citrix Access Gateway",
+          "login"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "深信服安全感知平台",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "安全感知平台",
+          "login.js",
+          "apps"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "帆软报表-FineReport",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "ReportServer",
+          "=fs"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "CAS 单点登录",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "Central Authentication Service",
+          "cas/login"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "海康威视 流媒体管理服务器",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "流媒体管理服务器",
+          "MSHTML",
+          "login"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "noVNC 远程访问",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "noVNC",
+          "<span>no</span>",
+          "host"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "MessageSolution Enterprise Email Archiving (EEA)",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "MessageSolution",
+          "index.jsp"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "阿里巴巴otter manager",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "Otter Manager",
+          "channelList"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "VMware vRealize Operations Manager",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "vRealize",
+          "VMware",
+          "Identity Manager"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "H3C-ER3200 路由器",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "ER3200",
+          "home.asp",
+          "h3c.com"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "安恒云堡垒机",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "DBAPPSecurity",
+          "安恒云堡垒机"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Citrix 虚拟桌面",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1272756243"
+      }
+    ]
+  },
+  {
+    "name": "SeaweedFS",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1210969935"
+      }
+    ]
+  },
+  {
+    "name": "FreeRDP 远程RDP工具",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-2052468252"
+      }
+    ]
+  },
+  {
+    "name": "Parallels Default page",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1050786453"
+      }
+    ]
+  },
+  {
+    "name": "Plesk 面板",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-134375033"
+      }
+    ]
+  },
+  {
+    "name": "DzzOffice 开源办公系统",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1961736892"
+      }
+    ]
+  },
+  {
+    "name": "网康科技网关/防火墙",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "5471989"
+      }
+    ]
+  },
+  {
+    "name": "SuperMap iServer Web Manager",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1740191553"
+      }
+    ]
+  },
+  {
+    "name": "协众OA",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1466673461"
+      },
+      {
+        "location": "body",
+        "match": [
+          "scripts/cnoa.extra.js"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Jellyfin",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-2069226242"
+      }
+    ]
+  },
+  {
+    "name": "孚盟云 CRM",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1533124028"
+      }
+    ]
+  },
+  {
+    "name": "FastAdmin 框架",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "assets/img/favicon.ico",
+          "bootstrap.min.css",
+          "navbar-toggle"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "ajax\\/upload",
+          "assets/img/favicon.ico",
+          "fastadmin"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "imo云办公室",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "<a title=\"imo云办公室\""
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "高效率网上办公平台",
+          "imo_setup.exe"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "永中DCS",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "<title>永中文档在线预览DCS</title>",
+          "www.yozodcs.com"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "JeecgBoot",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "JeecgBoot",
+          "polyfill_"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "jeecg-boot",
+          "Jeecg-Boot 快速开发平台"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "积木报表",
+          "JimuReport"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "/sys/common/pdf/pdfPreviewIframe"
+        ]
+      },
+      {
+        "location": "hash",
+        "hash": "1380908726"
+      },
+      {
+        "location": "hash",
+        "hash": "-250963920"
+      },
+      {
+        "location": "body",
+        "path": "/sys/common/pdf/pdfPreviewIframe",
+        "match": [
+          "pdfPreviewIframe"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "帆软数据决策系统",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          ">数据决策系统",
+          "ReportServer?op"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "金山TimeOn云杀毒",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "<title>TimeOn",
+          "iepngfix/iepngfix_tilebg.js"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "金山终端安全",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "终端安全系统",
+          "setup/kanclient.exe",
+          "iepngfix/iepngfix_tilebg.js"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "微擎 - 公众平台自助引擎",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "微擎 - 公众平台自助引擎",
+          "www.w7.cc",
+          "login"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Jspxcms",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "- Powered by Jspxcms",
+          "template/"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "WordPress",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "wp-admin",
+          "wp-content/"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "wp-",
+          "wp-content/themes/"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "金合OA",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "Jhsoft.Web.login",
+          "PassWord.aspx"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "好视通视频会议系统",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "用户登录",
+          "resources/commonImage/favicon.ico",
+          "login/createQRCode.do"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "LANMP 默认页面",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "<title>LANMP",
+          "<strong>恭喜",
+          "wdlinux.cn",
+          "本页可删除"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "CentOS 默认页面",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "<title>Welcome to CentOS</title>",
+          "img/centos-logo.png",
+          "centos.org"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "蓝凌EIS智慧协同平台",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "/scripts/jquery.landray.common.js",
+          "蓝凌软件"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "phpinfo",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "<title>phpinfo",
+          "Virtual Directory Support"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Kyan 监控设备",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "login_files",
+          "platform",
+          "欢迎登陆系统"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Hue 大数据框架",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "Welcome to Hue",
+          "Query. Explore.",
+          "login"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "亿邮邮件系统",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "eYou",
+          "q=login",
+          "tpl/user"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "网神下一代极速防火墙",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "网神信息技术",
+          "login",
+          "防火墙"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "中腾OA",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "systemAction",
+          "zt_webframe",
+          "login"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "TVT 公司产品",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "492290497"
+      }
+    ]
+  },
+  {
+    "name": "资产灯塔系统",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1708240621"
+      }
+    ]
+  },
+  {
+    "name": "WinWebMail邮件系统",
+    "type": "CMS",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "images/hrefbt.css",
+          "WinWebMail"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Spring env",
+    "type": "Framework",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "servletContextInitParams"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "logback"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Apache Shiro",
+    "type": "Framework",
+    "rules": [
+      {
+        "location": "header",
+        "match": [
+          "rememberMe="
+        ],
+        "description":"Apache Shiro RememberMe Cookie"
+      },
+      {
+        "location": "header",
+        "match": [
+          "=deleteMe"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "spring-boot",
+    "type": "Framework",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "116323821"
+      }
+    ]
+  },
+  {
+    "name": "Angular IO (AngularJS)",
+    "type": "Framework",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1255347784"
+      }
+    ]
+  },
+  {
+    "name": "React",
+    "type": "Framework",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-2009722838"
+      }
+    ]
+  },
+  {
+    "name": "ThinkPHP",
+    "type": "Framework",
+    "rules": [
+      {
+        "location": "header",
+        "match": [
+          "ThinkPHP"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Weblogic",
+    "type": "Middleware",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "Error 404--Not Found"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "Error 403--"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "/console/framework/skins/wlsconsole/images/login_WebLogic_branding.png"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "Welcome to Weblogic Application Server"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "<i>Hypertext Transfer Protocol -- HTTP/1.1</i>"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Jboss",
+    "type": "Middleware",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "jboss.css"
+        ]
+      },
+      {
+        "location": "hash",
+        "hash": "-656811182"
+      }
+    ]
+  },
+  {
+    "name": "Tomcat默认页面",
+    "type": "Middleware",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "/manager/status",
+          "/manager/html"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Apache Tomcat",
+    "type": "Middleware",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-297069493"
+      }
+    ]
+  },
+  {
+    "name": "Jetty 404",
+    "type": "Middleware",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-629047854"
+      }
+    ]
+  },
+  {
+    "name": "JBoss Application Server 7",
+    "type": "Middleware",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "937999361"
+      }
+    ]
+  },
+  {
+    "name": "Apache Haus",
+    "type": "Middleware",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-632070065"
+      }
+    ]
+  },
+  {
+    "name": "Microsoft IIS",
+    "type": "Middleware",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "-1414475558"
+      }
+    ]
+  },
+  {
+    "name": "Apache2 Debian 默认页",
+    "type": "Middleware",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "Apache2 Debian Default",
+          "It works!",
+          "Debian Logo"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Apache2 Ubuntu 默认页",
+    "type": "Middleware",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "Apache2 Ubuntu Default Page",
+          "ubuntu-logo.png"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Apache ActiveMQ",
+    "type": "Middleware",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1766699363"
+      }
+    ]
+  },
+  {
+    "name": "Apache-Skywalking",
+    "type": "Middleware",
+    "rules": [
+      {
+        "location": "hash",
+        "hash": "1929532064"
+      }
+    ]
+  },
+  {
+    "name": "Druid Monitor",
+    "type": "Middleware",
+    "rules": [
+      {
+        "location": "body",
+        "path": "/druid/index.html",
+        "match": [
+          "Druid Stat Index"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Spring Boot Actuator",
+    "type": "Framework",
+    "rules": [
+      {
+        "location": "body",
+        "path": "/actuator/health",
+        "match": [
+          "{\"status\":\"UP\"}",
+          "status"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Jenkins",
+    "type": "Middleware",
+    "rules": [
+      {
+        "location": "body",
+        "path": "/login",
+        "match": [
+          "Jenkins"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Git Exposure",
+    "type": "Vulnerability",
+    "rules": [
+      {
+        "location": "body",
+        "path": "/.git/config",
+        "match": [
+          "[core]",
+          "repositoryformatversion"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Nacos",
+    "type": "Middleware",
+    "rules": [
+      {
+        "location": "body",
+        "path": "/nacos/index.html",
+        "match": [
+          "Nacos",
+          "console-ui"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Apache Solr",
+    "type": "Middleware",
+    "rules": [
+      {
+        "location": "body",
+        "path": "/solr/#/",
+        "match": [
+          "Solr Admin",
+          "Dashboard"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "GraphQL",
+    "type": "API",
+    "rules": [
+      {
+        "location": "body",
+        "path": "/graphql",
+        "match": [
+          "query",
+          "errors",
+          "data"
+        ]
+      },
+      {
+        "location": "body",
+        "path": "/graphiql",
+        "match": [
+          "GraphiQL",
+          "Loading..."
+        ]
+      },
+      {
+        "location": "body",
+        "path": "/graphql/console",
+        "match": [
+          "GraphiQL"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "SpringbootActuator",
+    "type": "API",
+    "rules": [
+      {
+        "location": "body",
+        "path": "/actuator",
+        "match": [
+          "_links",
+          "self"
+        ]
+      },
+      {
+        "location": "body",
+        "path": "/actuator/mappings",
+        "match": [
+          "contexts",
+          "dispatcherServlets"
+        ]
+      },
+      {
+        "location": "body",
+        "path": "/actuator/env",
+        "match": [
+          "activeProfiles",
+          "propertySources"
+        ]
+      },
+      {
+        "location": "body",
+        "path": "/mappings",
+        "match": [
+          "bean",
+          "method"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "SOAP-WSDL",
+    "type": "API",
+    "rules": [
+      {
+        "location": "body",
+        "path": "/service?wsdl",
+        "match": [
+          "wsdl:definitions",
+          "targetNamespace"
+        ]
+      },
+      {
+        "location": "body",
+        "path": "/webservice?wsdl",
+        "match": [
+          "wsdl:definitions",
+          "targetNamespace"
+        ]
+      },
+      {
+        "location": "body",
+        "path": "/?wsdl",
+        "match": [
+          "wsdl:definitions"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "REST-WADL",
+    "type": "API",
+    "rules": [
+      {
+        "location": "body",
+        "path": "/application.wadl",
+        "match": [
+          "application/vnd.sun.wadl+xml",
+          "wadl:application"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Swagger-More",
+    "type": "API",
+    "rules": [
+      {
+        "location": "body",
+        "path": "/swagger-resources",
+        "match": [
+          "location",
+          "swaggerVersion"
+        ]
+      },
+      {
+        "location": "body",
+        "path": "/v2/api-docs",
+        "match": [
+          "swagger",
+          "info",
+          "paths"
+        ]
+      },
+      {
+        "location": "body",
+        "path": "/v3/api-docs",
+        "match": [
+          "openapi",
+          "info",
+          "paths"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Sensitive Files",
+    "type": "Sensitive",
+    "rules": [
+      { "location": "body", "path": "/.git/HEAD", "match": ["refs/heads/"] },
+      { "location": "body", "path": "/.svn/entries", "match": ["dir"] },
+      { "location": "body", "path": "/.DS_Store", "match": ["Bud1"] },
+      { "location": "body", "path": "/.idea/modules.xml", "match": ["project", "modules"] },
+      { "location": "body", "path": "/WEB-INF/web.xml", "match": ["servlet"] },
+      { "location": "body", "path": "/config.xml", "status": 200,"match": ["config"]},
+      { "location": "body", "path": "/.bash_history", "match": ["cd"] },
+      { "location": "body", "path": "/.viminfo", "match": ["Vim info"] },
+      { "location": "body", "path": "/.mysql_history", "match": ["SELECT"] },
+      { "location": "body", "path": "/Dockerfile", "match": ["FROM", "RUN", "EXPOSE"] },
+      { "location": "body", "path": "/nginx.conf", "match": ["http", "server", "location"] },
+      { "location": "body", "path": "/php.ini", "match": ["PHP"] },
+      { "location": "body", "path": "/web.config", "match": ["configuration", "system.webServer"] }
+    ]
+  },
+  {
+    "name": "Backup Files",
+    "type": "Sensitive",
+    "rules": [
+      { "location": "body", "path": "/www.zip", "status": 200 },
+      { "location": "body", "path": "/www.rar", "status": 200 },
+      { "location": "body", "path": "/www.7z", "status": 200 },
+      { "location": "body", "path": "/www.tar.gz", "status": 200 },
+      { "location": "body", "path": "/backup.zip", "status": 200 },
+      { "location": "body", "path": "/web.zip", "status": 200 },
+      { "location": "body", "path": "/wwwroot.zip", "status": 200 },
+      { "location": "body", "path": "/index.sql", "status": 200 }
+    ]
+  },
+  {
+    "name": "Admin Panels",
+    "type": "Sensitive",
+    "rules": [
+      { "location": "body", "path": "/phpMyAdmin", "status": 200,"match": ["phpMyAdmin"] },
+      { "location": "body", "path": "/xxl-job-admin/toLogin", "match": ["XXL-JOB"] },
+      { "location": "body", "path": "/jenkins/script", "status": 200 },
+      { "location": "body", "path": "/zabbix", "status": 200, "match": ["zabbix"] },
+      { "location": "body", "path": "/solr/", "match": ["Solr Admin"] },
+      { "location": "body", "path": "/resin-admin/", "match": ["Resin Admin"] }
+    ]
+  },
+  {
+    "name": "Path Traversal Test",
+    "type": "Vulnerability",
+    "rules": [
+      { "location": "body", "path": "/..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252fetc/passwd", "match": ["root"] },
+      { "location": "body", "path": "/..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252fwindows/win.ini", "match": ["for 16-bit app support"] }
+    ]
+  },
+  {
+    "name": "Spring Boot / Java API",
+    "type": "Sensitive",
+    "rules": [
+      { "location": "body", "path": "/actuator/health", "match": ["status", "UP"] },
+      { "location": "body", "path": "/actuator/info", "status": 200 },
+      { "location": "body", "path": "/actuator/metrics", "match": ["names"] },
+      { "location": "body", "path": "/actuator/loggers", "match": ["levels"] },
+      { "location": "body", "path": "/actuator/logfile", "status": 200 },
+      { "location": "body", "path": "/jolokia/list", "match": ["value", "mbean"] },
+      { "location": "body", "path": "/hystrix", "match": ["Hystrix"] },
+      { "location": "body", "path": "/monitor", "status": 200 },
+      { "location": "body", "path": "/api/index.html", "status": 200 },
+      { "location": "body", "path": "/system/druid/index.html", "status": 200,"match": ["druid"] },
+      { "location": "body", "path": "/webpage/system/druid/index.html","status": 200, "match": ["druid"] }
+    ]
+  },
+  {
+    "name": "Swagger UI / Docs",
+    "type": "Sensitive",
+    "rules": [
+      { "location": "body", "path": "/api.html", "match": ["Swagger"] },
+      { "location": "body", "path": "/swagger-ui.html", "match": ["Swagger UI"] },
+      { "location": "body", "path": "/swagger/index.html", "match": ["Swagger UI"] },
+      { "location": "body", "path": "/swagger/swagger-ui.html", "match": ["Swagger UI"] },
+      { "location": "body", "path": "/v1/swagger.json", "status": 200,"match": ["swagger"] },
+      { "location": "body", "path": "/v2/swagger.json","status": 200, "match": ["swagger"] },
+      { "location": "body", "path": "/static/swagger.json", "status": 200 },
+      { "location": "body", "path": "/jeecg/swagger-ui","status": 200, "match": ["jeecg"] }
+    ]
+  },
+  {
+    "name": "Config & Logs",
+    "type": "Sensitive",
+    "rules": [
+      { "location": "body", "path": "/config.properties", "status": 200 },
+      { "location": "body", "path": "/project.properties", "status": 200 },
+      { "location": "body", "path": "/logs/access.log", "status": 200 },
+      { "location": "body", "path": "/logs/error.log", "status": 200 },
+      { "location": "body", "path": "/error.log", "status": 200 },
+      { "location": "body", "path": "/access.log", "status": 200 },
+      { "location": "body", "path": "/debug.log", "status": 200 },
+      { "location": "body", "path": "/log.txt", "status": 200 },
+      { "location": "body", "path": "/config.ini", "status": 200 }
+    ]
+  },
+  {
+    "name": "Database & SQL",
+    "type": "Sensitive",
+    "rules": [
+      { "location": "body", "path": "/data.mdb", "status": 200 },
+      { "location": "body", "path": "/db.mdb", "status": 200 },
+      { "location": "body", "path": "/database.sql", "status": 200 },
+      { "location": "body", "path": "/dump.sql", "status": 200 },
+      { "location": "body", "path": "/mysql.sql", "status": 200 },
+      { "location": "body", "path": "/backup.sql", "status": 200 }
+    ]
+  },
+  {
+    "name": "Other Services",
+    "type": "Sensitive",
+    "rules": [
+      { "location": "body", "path": "/version", "status": 200 },
+      { "location": "body", "path": "/services", "status": 200 },
+      { "location": "body", "path": "/_nodes", "match": ["nodes", "cluster_name"] },
+      { "location": "body", "path": "/server-status", "match": ["Apache Status"] }
+    ]
+  },
+    {
+    "name": "goserver",
+    "type": "CMS",
+    "rules": [
+      { "location": "body", "path": "goserver", "status": 200}
+    ]
+  }
+]

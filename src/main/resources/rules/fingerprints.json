@@ -88,6 +88,223 @@
     ]
   },
   {
+    "name": "Ruby on Rails",
+    "type": "Language",
+    "rules": [
+      {
+        "location": "header",
+        "field": "X-Powered-By",
+        "match": ["Phusion Passenger"]
+      },
+      {
+        "location": "header",
+        "field": "X-Rack-Cache",
+        "match": [".+"]
+      },
+      {
+        "location": "header",
+        "field": "Set-Cookie",
+        "match": ["_session_id", "_rails_session"]
+      }
+    ]
+  },
+  {
+    "name": "Go",
+    "type": "Language",
+    "rules": [
+      {
+        "location": "header",
+        "field": "X-Go-Version",
+        "match": [".+"]
+      },
+      {
+        "location": "body",
+        "match": ["Go-http-client", "golang.org"]
+      }
+    ]
+  },
+  {
+    "name": "Rust",
+    "type": "Language",
+    "rules": [
+      {
+        "location": "header",
+        "field": "X-Powered-By",
+        "match": ["Rocket"]
+      },
+      {
+        "location": "header",
+        "field": "Server",
+        "match": ["actix-web"]
+      }
+    ]
+  },
+  {
+    "name": "UEditor",
+    "type": "Editor",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "ueditor.config.js",
+          "ueditor.all.js"
+        ]
+      },
+      {
+        "location": "body",
+        "path": "/ueditor/net/controller.ashx?action=catchimage",
+        "match": ["action", "state"],
+        "description": "Potential Arbitrary File Upload (.NET)"
+      },
+      {
+        "location": "body",
+        "path": "/ueditor/php/controller.php?action=catchimage",
+        "match": ["action", "state"],
+        "description": "Potential SSRF/File Upload (PHP)"
+      },
+      {
+        "location": "body",
+        "path": "/ueditor/jsp/controller.jsp?action=catchimage",
+        "match": ["action", "state"],
+        "description": "Potential SSRF (JSP)"
+      }
+    ]
+  },
+  {
+    "name": "eWebEditor",
+    "type": "Editor",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "ewebeditor.asp",
+          "ewebeditor.js",
+          "eWebEditor_System"
+        ]
+      },
+      {
+        "location": "body",
+        "path": "/ewebeditor/admin_login.asp",
+        "match": ["Admin_Login", "eWebEditor"],
+        "description": "Admin Login Page"
+      },
+      {
+        "location": "body",
+        "path": "/db/ewebeditor.mdb",
+        "match": ["Standard Jet DB"],
+        "description": "Database Download"
+      }
+    ]
+  },
+  {
+    "name": "FCKeditor",
+    "type": "Editor",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "fckeditor.js",
+          "fckconfig.js",
+          "FCKeditorAPI"
+        ]
+      },
+      {
+        "location": "body",
+        "path": "/fckeditor/editor/filemanager/connectors/test.html",
+        "match": ["FCKeditor", "Connector"],
+        "description": "Connector Test Page"
+      }
+    ]
+  },
+  {
+    "name": "KindEditor",
+    "type": "Editor",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "kindeditor-min.js",
+          "kindeditor.js",
+          "KindEditor.ready"
+        ]
+      },
+      {
+        "location": "body",
+        "path": "/kindeditor/php/upload_json.php",
+        "match": ["error", "url"],
+        "description": "Potential File Upload Point"
+      }
+    ]
+  },
+  {
+    "name": "CKEditor",
+    "type": "Editor",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "ckeditor.js",
+          "CKEDITOR.replace",
+          "ckeditor/config.js"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Vue.js",
+    "type": "Framework",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "v-cloak",
+          "__vue__",
+          "vue.js",
+          "vue.min.js"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Element UI",
+    "type": "Component Library",
+    "rules": [
+      {
+        "location": "body",
+        "match": [
+          "el-table",
+          "el-button",
+          "el-input",
+          "element-ui"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Next.js",
+    "type": "Framework",
+    "rules": [
+      {
+        "location": "header",
+        "field": "X-Powered-By",
+        "match": ["Next\\.js"]
+      },
+      {
+        "location": "body",
+        "match": [
+          "/_next/static/",
+          "__NEXT_DATA__",
+          "id=\"__next\""
+        ]
+      },
+      {
+        "location": "header",
+        "field": "Vary",
+        "match": ["RSC", "Next-Router-State-Tree"]
+      }
+    ]
+  },
+  {
     "name": "seeyon",
     "type": "CMS",
     "rules": [
@@ -5713,6 +5930,41 @@
           "JeecgBoot",
           "polyfill_"
         ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "jeecg-boot",
+          "Jeecg-Boot 快速开发平台"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "积木报表",
+          "JimuReport"
+        ]
+      },
+      {
+        "location": "body",
+        "match": [
+          "/sys/common/pdf/pdfPreviewIframe"
+        ]
+      },
+      {
+        "location": "hash",
+        "hash": "1380908726"
+      },
+      {
+        "location": "hash",
+        "hash": "-250963920"
+      },
+      {
+        "location": "body",
+        "path": "/sys/common/pdf/pdfPreviewIframe",
+        "match": [
+          "pdfPreviewIframe"
+        ]
       }
     ]
   },
@@ -5855,19 +6107,6 @@
           "<title>Welcome to CentOS</title>",
           "img/centos-logo.png",
           "centos.org"
-        ]
-      }
-    ]
-  },
-  {
-    "name": "百度 ueditor编辑器",
-    "type": "CMS",
-    "rules": [
-      {
-        "location": "body",
-        "match": [
-          "ueditor.all.js",
-          "UE.getEditor"
         ]
       }
     ]
@@ -6020,14 +6259,15 @@
     ]
   },
   {
-    "name": "Shiro",
+    "name": "Apache Shiro",
     "type": "Framework",
     "rules": [
       {
         "location": "header",
         "match": [
           "rememberMe="
-        ]
+        ],
+        "description":"Apache Shiro RememberMe Cookie"
       },
       {
         "location": "header",

@@ -50,6 +50,11 @@ public class Rule {
      */
     private String hash;
 
+    /**
+     * 规则描述。可以用来描述指纹的具体特征或潜在漏洞。
+     */
+    private String description;
+
     // Getters and Setters
     public String getLocation() { return location; }
     public void setLocation(String location) { this.location = location; }
@@ -68,4 +73,7 @@ public class Rule {
 
     public String getHash() { return hash; }
     public void setHash(String hash) { this.hash = hash; }
+
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 }
