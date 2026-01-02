@@ -1,5 +1,93 @@
 [
   {
+    "name": "PHP",
+    "type": "Language",
+    "rules": [
+      {
+        "location": "header",
+        "field": "X-Powered-By",
+        "match": ["PHP"]
+      },
+      {
+        "location": "header",
+        "field": "Set-Cookie",
+        "match": ["PHPSESSID"]
+      }
+    ]
+  },
+  {
+    "name": "Java",
+    "type": "Language",
+    "rules": [
+      {
+        "location": "header",
+        "field": "X-Powered-By",
+        "match": ["Servlet", "JSP"]
+      },
+      {
+        "location": "header",
+        "field": "Set-Cookie",
+        "match": ["JSESSIONID"]
+      },
+      {
+        "location": "body",
+        "match": ["java.lang.", "javax.servlet"]
+      }
+    ]
+  },
+  {
+    "name": "Python",
+    "type": "Language",
+    "rules": [
+      {
+        "location": "header",
+        "field": "Server",
+        "match": ["Werkzeug", "Gunicorn"]
+      },
+      {
+        "location": "header",
+        "field": "X-Powered-By",
+        "match": ["Python"]
+      }
+    ]
+  },
+  {
+    "name": "ASP.NET",
+    "type": "Language",
+    "rules": [
+      {
+        "location": "header",
+        "field": "X-Powered-By",
+        "match": ["ASP.NET"]
+      },
+      {
+        "location": "header",
+        "field": "X-AspNet-Version",
+        "match": [".+"]
+      },
+      {
+        "location": "header",
+        "field": "Set-Cookie",
+        "match": ["ASP.NET_SessionId"]
+      },
+      {
+        "location": "body",
+        "match": ["__VIEWSTATE", "__EVENTVALIDATION"]
+      }
+    ]
+  },
+  {
+    "name": "Node.js",
+    "type": "Language",
+    "rules": [
+      {
+        "location": "header",
+        "field": "X-Powered-By",
+        "match": ["Express"]
+      }
+    ]
+  },
+  {
     "name": "seeyon",
     "type": "CMS",
     "rules": [

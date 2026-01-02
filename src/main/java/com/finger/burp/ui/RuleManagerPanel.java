@@ -5,13 +5,20 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.finger.burp.model.Fingerprint;
+import com.finger.burp.model.ScannerConfig;
 import com.finger.burp.rules.RuleLoader;
+import com.finger.burp.utils.ConfigPersistence;
 import com.finger.burp.utils.I18n;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.io.File;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,6 +40,7 @@ public class RuleManagerPanel extends JPanel {
     private final JButton importButton;
     private final JButton exportButton;
     private final JButton addButton;
+    private final JButton updateButton;
     private final JButton helpButton;
     private final JMenuItem editItem;
     private final JMenuItem deleteItem;
@@ -86,15 +94,18 @@ public class RuleManagerPanel extends JPanel {
         importButton = new JButton(I18n.get("rule_import"));
         exportButton = new JButton(I18n.get("rule_export"));
         addButton = new JButton(I18n.get("rule_add"));
+        updateButton = new JButton(I18n.get("rule_update"));
         helpButton = new JButton(I18n.get("rule_help"));
 
         importButton.addActionListener(e -> importRules());
         exportButton.addActionListener(e -> exportRules());
         addButton.addActionListener(e -> addRule());
+        updateButton.addActionListener(e -> updateRulesOnline());
         helpButton.addActionListener(e -> showHelpDialog());
 
         buttonPanel.add(helpButton);
         buttonPanel.add(new JSeparator(JSeparator.VERTICAL));
+        buttonPanel.add(updateButton);
         buttonPanel.add(addButton);
         buttonPanel.add(importButton);
         buttonPanel.add(exportButton);
@@ -124,77 +135,95 @@ public class RuleManagerPanel extends JPanel {
     }
 
     private void showHelpDialog() {
-        // 使用简单的 JTextArea 替代 JEditorPane 以解决渲染重影和乱码问题
-        JTextArea textArea = new JTextArea();
-        textArea.setEditable(false);
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
-        textArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
-        textArea.setBackground(UIManager.getColor("Panel.background"));
-        textArea.setForeground(UIManager.getColor("Label.foreground"));
+        JEditorPane editorPane = new JEditorPane();
+        editorPane.setEditable(false);
+        editorPane.setContentType("text/html");
         
-        StringBuilder helpText = new StringBuilder();
+        String helpContent;
         if (I18n.getLanguage() == I18n.Language.CHINESE) {
-            helpText.append("=== 指纹规则字段规格说明 ===\n\n");
-            helpText.append("本文档定义了 Finger 插件指纹规则的 JSON 结构及其后端处理逻辑。\n\n");
-            
-            helpText.append("1. 整体结构 (Fingerprint)\n");
-            helpText.append("----------------------------\n");
-            helpText.append("- name:  指纹名称 (如 \"Spring Boot\", \"Nginx\")。\n");
-            helpText.append("- type:  指纹分类 (如 \"Framework\", \"CMS\", \"Middleware\")。\n");
-            helpText.append("- rules: 匹配规则列表。逻辑关系为 [OR (或)]：只要有一条规则匹配，该指纹即命中。\n\n");
-            
-            helpText.append("2. 匹配规则 (Rule)\n");
-            helpText.append("----------------------------\n");
-            helpText.append("- location: [必填] 匹配位置。可选值: header, body, hash, status。\n");
-            helpText.append("- match:    匹配关键字。支持单字符串或数组。逻辑关系为 [AND (与)]：所有关键字必须同时出现。\n");
-            helpText.append("- field:    [可选] 当 location 为 header 时，指定 HTTP 头字段名 (如 \"Set-Cookie\")。\n");
-            helpText.append("- path:     [可选] 探测路径。用于主动/被动触发特定 URL 的检测 (如 \"/favicon.ico\")。\n");
-            helpText.append("- status:   [可选] 匹配特定的 HTTP 状态码 (如 200, 403)。\n");
-            helpText.append("- hash:     [可选] 当 location 为 hash 时，匹配响应体的 MurmurHash3 或 MD5 值。\n\n");
-            
-            helpText.append("3. 后端逻辑详解\n");
-            helpText.append("----------------------------\n");
-            helpText.append("- location=body: 在 HTTP 响应体中搜索 match 关键字。\n");
-            helpText.append("- location=header: 在 HTTP 响应头中搜索。如果指定了 field，则仅在该字段值中搜索；否则在整个响应头文本中搜索。\n");
-            helpText.append("- location=status: 检查响应状态码是否等于指定的 status 值。\n");
-            helpText.append("- location=hash: 计算响应体的 MurmurHash3 或 MD5 值并进行比对。计算 favicon.ico 的 hash 时常用于指纹识别。\n");
-            helpText.append("- location=path: 当该规则包含 path 字段时，被动扫描在发现主机时会自动触发该路径的探测请求。\n");
+            helpContent = "<html><body style='font-family: sans-serif; padding: 10px;'>" +
+                "<h2>Finger 指纹规则编写指南</h2>" +
+                "<p>指纹规则采用 JSON 格式，结构分为两层：<b>指纹定义 (Fingerprint)</b> 和 <b>匹配规则 (Rule)</b>。</p>" +
+                "<h3>1. 指纹定义 (Fingerprint)</h3>" +
+                "<ul>" +
+                "<li><b>name</b>: 指纹的名称，如 'Spring Boot'。必须唯一。</li>" +
+                "<li><b>type</b>: 指纹分类，如 'Framework', 'CMS', 'MiddleWare'。</li>" +
+                "<li><b>rules</b>: 包含一个或多个匹配规则的列表。</li>" +
+                "</ul>" +
+                "<h3>2. 匹配规则 (Rule)</h3>" +
+                "<ul>" +
+                "<li><b>location</b>: 匹配位置。支持：<br/>" +
+                "&nbsp;&nbsp;- <code>body</code>: 匹配响应体内容。<br/>" +
+                "&nbsp;&nbsp;- <code>header</code>: 匹配响应头。<br/>" +
+                "&nbsp;&nbsp;- <code>hash</code>: 匹配 favicon 的 hash 值（使用 MurmurHash3）。<br/>" +
+                "&nbsp;&nbsp;- <code>status</code>: 匹配 HTTP 状态码。</li>" +
+                "<li><b>match</b>: 匹配关键词列表。多个关键词之间是 <b>AND</b> 逻辑（必须全部匹配）。</li>" +
+                "<li><b>path</b>: 主动探测路径。仅对主动规则有效，例如 <code>/favicon.ico</code>。</li>" +
+                "<li><b>status</b>: 预期的状态码，如 <code>200</code>。</li>" +
+                "<li><b>field</b>: 当 location 为 header 时，指定匹配的字段，如 <code>Server</code>。</li>" +
+                "<li><b>is_active</b>: 是否为主动扫描规则 (true/false)。</li>" +
+                "</ul>" +
+                "<h3>3. 规则示例</h3>" +
+                "<pre style='background: #f4f4f4; padding: 10px; border: 1px solid #ddd;'>" +
+                "{\n" +
+                "  \"name\": \"Spring Boot\",\n" +
+                "  \"type\": \"Framework\",\n" +
+                "  \"rules\": [\n" +
+                "    {\n" +
+                "      \"location\": \"body\",\n" +
+                "      \"match\": [\"Whitelabel Error Page\"],\n" +
+                "      \"is_active\": false\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}" +
+                "</pre>" +
+                "</body></html>";
         } else {
-            helpText.append("=== Fingerprint Rule Specification ===\n\n");
-            helpText.append("This document defines the JSON structure and backend logic for Finger plugin rules.\n\n");
-            
-            helpText.append("1. Overall Structure (Fingerprint)\n");
-            helpText.append("----------------------------\n");
-            helpText.append("- name:  Fingerprint name (e.g., \"Spring Boot\", \"Nginx\").\n");
-            helpText.append("- type:  Category (e.g., \"Framework\", \"CMS\", \"Middleware\").\n");
-            helpText.append("- rules: List of matching rules. Relationship is [OR]: any rule match results in a hit.\n\n");
-            
-            helpText.append("2. Matching Rule (Rule)\n");
-            helpText.append("----------------------------\n");
-            helpText.append("- location: [Required] Match position. Options: header, body, hash, status.\n");
-            helpText.append("- match:    Keywords. Supports string or array. Relationship is [AND]: all keywords must match.\n");
-            helpText.append("- field:    [Optional] When location=header, specifies header field (e.g., \"Set-Cookie\").\n");
-            helpText.append("- path:     [Optional] Probe path for active/passive triggering (e.g., \"/favicon.ico\").\n");
-            helpText.append("- status:   [Optional] Matches specific HTTP status code (e.g., 200, 403).\n");
-            helpText.append("- hash:     [Optional] When location=hash, matches MurmurHash3 or MD5 of response body.\n\n");
-            
-            helpText.append("3. Backend Logic Details\n");
-            helpText.append("----------------------------\n");
-            helpText.append("- location=body: Searches for match keywords in the HTTP response body.\n");
-            helpText.append("- location=header: Searches in HTTP headers. If field is specified, searches only in that field; otherwise searches entire header text.\n");
-            helpText.append("- location=status: Checks if status code equals specified status.\n");
-            helpText.append("- location=hash: Calculates and compares MurmurHash3 or MD5 of response body. Often used for favicon.ico identification.\n");
-            helpText.append("- location=path: Passive scan will automatically trigger probe requests to this path when a host is discovered.\n");
+            helpContent = "<html><body style='font-family: sans-serif; padding: 10px;'>" +
+                "<h2>Finger Rule Writing Guide</h2>" +
+                "<p>Fingerprint rules use JSON format with two layers: <b>Definition</b> and <b>Matching Rules</b>.</p>" +
+                "<h3>1. Fingerprint Definition</h3>" +
+                "<ul>" +
+                "<li><b>name</b>: Unique name of the fingerprint (e.g., 'Spring Boot').</li>" +
+                "<li><b>type</b>: Category (e.g., 'Framework', 'CMS').</li>" +
+                "<li><b>rules</b>: A list of one or more matching rules.</li>" +
+                "</ul>" +
+                "<h3>2. Matching Rule</h3>" +
+                "<ul>" +
+                "<li><b>location</b>: Where to match. Supported:<br/>" +
+                "&nbsp;&nbsp;- <code>body</code>: Match response body content.<br/>" +
+                "&nbsp;&nbsp;- <code>header</code>: Match response headers.<br/>" +
+                "&nbsp;&nbsp;- <code>hash</code>: Match favicon hash (MurmurHash3).<br/>" +
+                "&nbsp;&nbsp;- <code>status</code>: Match HTTP status code.</li>" +
+                "<li><b>match</b>: List of keywords. Multiple keywords use <b>AND</b> logic.</li>" +
+                "<li><b>path</b>: Probe path. For active rules only (e.g., <code>/favicon.ico</code>).</li>" +
+                "<li><b>status</b>: Expected status code (e.g., <code>200</code>).</li>" +
+                "<li><b>field</b>: Header field name if location is header (e.g., <code>Server</code>).</li>" +
+                "<li><b>is_active</b>: Whether it's an active scan rule (true/false).</li>" +
+                "</ul>" +
+                "<h3>3. Example</h3>" +
+                "<pre style='background: #f4f4f4; padding: 10px; border: 1px solid #ddd;'>" +
+                "{\n" +
+                "  \"name\": \"Spring Boot\",\n" +
+                "  \"type\": \"Framework\",\n" +
+                "  \"rules\": [\n" +
+                "    {\n" +
+                "      \"location\": \"body\",\n" +
+                "      \"match\": [\"Whitelabel Error Page\"],\n" +
+                "      \"is_active\": false\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}" +
+                "</pre>" +
+                "</body></html>";
         }
         
-        textArea.setText(helpText.toString());
-        textArea.setCaretPosition(0);
+        editorPane.setText(helpContent);
+        editorPane.setCaretPosition(0);
         
-        JScrollPane scrollPane = new JScrollPane(textArea);
+        JScrollPane scrollPane = new JScrollPane(editorPane);
         scrollPane.setPreferredSize(new Dimension(600, 500));
-        String title = I18n.getLanguage() == I18n.Language.CHINESE ? "规则字段规格说明" : "Rule Field Specification";
-        JOptionPane.showMessageDialog(this, scrollPane, title, JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, scrollPane, I18n.get("rule_help"), JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void updateScanTypeFilter() {
@@ -219,6 +248,7 @@ public class RuleManagerPanel extends JPanel {
         importButton.setText(I18n.get("rule_import"));
         exportButton.setText(I18n.get("rule_export"));
         addButton.setText(I18n.get("rule_add"));
+        updateButton.setText(I18n.get("rule_update"));
         helpButton.setText(I18n.get("rule_help"));
         editItem.setText(I18n.get("rule_edit"));
         deleteItem.setText(I18n.get("rule_delete"));
@@ -233,7 +263,9 @@ public class RuleManagerPanel extends JPanel {
         filteredFingerprints = allFingerprints.stream()
                 .filter(f -> {
                     // 1. 关键词搜索
-                    boolean matchesQuery = f.getName().toLowerCase().contains(query) || f.getType().toLowerCase().contains(query);
+                    String name = f.getName() != null ? f.getName().toLowerCase() : "";
+                    String type = f.getType() != null ? f.getType().toLowerCase() : "";
+                    boolean matchesQuery = name.contains(query) || type.contains(query);
                     if (!matchesQuery) return false;
                     
                     // 2. 主动/被动筛选 (0: All, 1: Active, 2: Passive)
@@ -287,6 +319,141 @@ public class RuleManagerPanel extends JPanel {
         }
     }
 
+    private void updateRulesOnline() {
+        if (JOptionPane.showConfirmDialog(this, I18n.get("rule_update_confirm"),
+                I18n.get("common_confirm"), JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        updateButton.setEnabled(false);
+        updateButton.setText(I18n.get("rule_updating"));
+
+        new Thread(() -> {
+            try {
+                ConfigPersistence configPersistence = new ConfigPersistence(api);
+                ScannerConfig config = configPersistence.loadConfig();
+                String url = config.getUpdateUrl();
+                
+                if (url == null || url.isEmpty()) {
+                    url = "https://fingerupload.oss-cn-beijing.aliyuncs.com/fingerprints.json";
+                }
+
+                HttpClient client = HttpClient.newBuilder()
+                        .followRedirects(HttpClient.Redirect.ALWAYS)
+                        .connectTimeout(Duration.ofSeconds(10))
+                        .build();
+
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(url))
+                        .timeout(Duration.ofSeconds(30))
+                        .GET()
+                        .build();
+
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                if (response.statusCode() == 200) {
+                    List<Fingerprint> newRules = mapper.readValue(response.body(),
+                            mapper.getTypeFactory().constructCollectionType(List.class, Fingerprint.class));
+
+                    if (newRules != null && !newRules.isEmpty()) {
+                        SwingUtilities.invokeLater(() -> {
+                            int addedCount = 0;
+                            int updatedCount = 0;
+                            List<String> preservedNames = new ArrayList<>();
+                            
+                            // 创建名称到指纹的映射，并记录所有本地规则名称
+                            java.util.Map<String, Fingerprint> localMap = new java.util.HashMap<>();
+                            java.util.Set<String> remoteNames = new java.util.HashSet<>();
+                            for (Fingerprint remoteFp : newRules) {
+                                if (remoteFp.getName() != null) remoteNames.add(remoteFp.getName());
+                            }
+
+                            for (Fingerprint fp : allFingerprints) {
+                                if (fp.getName() != null) {
+                                    localMap.put(fp.getName(), fp);
+                                    if (!remoteNames.contains(fp.getName())) {
+                                        preservedNames.add(fp.getName());
+                                    }
+                                }
+                            }
+
+                            for (Fingerprint remoteFp : newRules) {
+                                if (remoteFp.getName() == null) continue;
+                                
+                                if (localMap.containsKey(remoteFp.getName())) {
+                                    // 更新现有规则
+                                    Fingerprint localFp = localMap.get(remoteFp.getName());
+                                    int index = allFingerprints.indexOf(localFp);
+                                    if (index != -1) {
+                                        allFingerprints.set(index, remoteFp);
+                                        updatedCount++;
+                                    }
+                                } else {
+                                    // 新增规则
+                                    allFingerprints.add(remoteFp);
+                                    addedCount++;
+                                }
+                            }
+
+                            filter();
+                            ruleLoader.saveRules(allFingerprints);
+                            updateButton.setEnabled(true);
+                            updateButton.setText(I18n.get("rule_update"));
+                            
+                            StringBuilder sb = new StringBuilder();
+                            if (I18n.getLanguage() == I18n.Language.CHINESE) {
+                                sb.append(String.format("更新完成！\n\n新增规则: %d 条\n更新规则: %d 条\n保留自定义规则: %d 条", 
+                                    addedCount, updatedCount, preservedNames.size()));
+                                if (!preservedNames.isEmpty()) {
+                                    sb.append("\n\n保留的规则列表:\n");
+                                    for (String name : preservedNames) {
+                                        sb.append("- ").append(name).append("\n");
+                                    }
+                                }
+                            } else {
+                                sb.append(String.format("Update Complete!\n\nAdded: %d\nUpdated: %d\nPreserved: %d", 
+                                    addedCount, updatedCount, preservedNames.size()));
+                                if (!preservedNames.isEmpty()) {
+                                    sb.append("\n\nPreserved Rules:\n");
+                                    for (String name : preservedNames) {
+                                        sb.append("- ").append(name).append("\n");
+                                    }
+                                }
+                            }
+                            
+                            // 同时打印到控制台方便复制
+                            if (!preservedNames.isEmpty()) {
+                                api.logging().logToOutput("--- Preserved Custom Rules ---");
+                                for (String name : preservedNames) api.logging().logToOutput(name);
+                            }
+
+                            JOptionPane.showMessageDialog(this, sb.toString());
+                        });
+                    }
+                } else {
+                    throw new Exception("HTTP Status: " + response.statusCode());
+                }
+            } catch (Exception ex) {
+                api.logging().logToError("Online update failed: " + ex.toString());
+                ex.printStackTrace(); // Optional: will print to Burp's stderr
+                
+                SwingUtilities.invokeLater(() -> {
+                    updateButton.setEnabled(true);
+                    updateButton.setText(I18n.get("rule_update"));
+                    
+                    String errorMsg = ex.getMessage();
+                    if (errorMsg == null || errorMsg.isEmpty()) {
+                        errorMsg = ex.toString(); // Use toString() if message is null (e.g. NPE)
+                    }
+                    
+                    JOptionPane.showMessageDialog(this,
+                            I18n.get("rule_update_failed") + errorMsg,
+                            I18n.get("common_error"), JOptionPane.ERROR_MESSAGE);
+                });
+            }
+        }).start();
+    }
+
     private void addRule() {
         // 简化版：弹出一个文本域让用户输入 JSON
         showEditDialog(new Fingerprint(), true);
@@ -327,6 +494,14 @@ public class RuleManagerPanel extends JPanel {
         if (result == JOptionPane.OK_OPTION) {
             try {
                 Fingerprint updated = mapper.readValue(textArea.getText(), Fingerprint.class);
+                
+                // 校验：名称不能为空
+                if (updated.getName() == null || updated.getName().trim().isEmpty()) {
+                    String errorMsg = I18n.getLanguage() == I18n.Language.CHINESE ? "指纹名称不能为空！" : "Fingerprint name cannot be empty!";
+                    JOptionPane.showMessageDialog(this, errorMsg, I18n.get("common_error"), JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
                 if (isNew) {
                     allFingerprints.add(updated);
                 } else {

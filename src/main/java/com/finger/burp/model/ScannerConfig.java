@@ -11,6 +11,7 @@ public class ScannerConfig {
     private int threadCount;
     private double requestsPerSecond;
     private I18n.Language language;
+    private String updateUrl;
 
     public ScannerConfig() {
         // 默认配置
@@ -29,6 +30,15 @@ public class ScannerConfig {
         this.threadCount = 10;
         this.requestsPerSecond = 10.0;
         this.language = I18n.Language.CHINESE;
+        this.updateUrl = "https://fingerupload.oss-cn-beijing.aliyuncs.com/fingerprints.json";
+    }
+
+    public String getUpdateUrl() {
+        return updateUrl;
+    }
+
+    public void setUpdateUrl(String updateUrl) {
+        this.updateUrl = updateUrl;
     }
 
     public List<Integer> getExcludeStatusCodes() {

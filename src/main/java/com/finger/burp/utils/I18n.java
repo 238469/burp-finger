@@ -76,12 +76,32 @@ public class I18n {
         add("rule_edit", "编辑", "Edit");
         add("rule_delete", "删除", "Delete");
         add("rule_edit_title", "编辑规则 (JSON 格式)", "Edit Rule (JSON Format)");
+        add("rule_update", "在线更新", "Online Update");
+        add("rule_updating", "正在更新规则库...", "Updating rules...");
+        add("rule_update_success", "规则库更新成功！共加载 %d 条规则。", "Rules updated! %d rules loaded.");
+        add("rule_update_failed", "更新失败: ", "Update failed: ");
+        add("rule_update_confirm", "确定要从 GitHub 更新规则库吗？\n这将覆盖本地规则文件。", "Update rules from GitHub? This will overwrite local rules.");
+
+        // Help Dialog
+        add("help_title", "=== 指纹规则字段规格说明 ===", "=== Fingerprint Rule Specification ===");
+        add("help_desc", "本文档定义了指纹规则的 JSON 结构及其处理逻辑。", "This document defines the JSON structure and logic for rules.");
+        add("help_section_1", "1. 基础信息 (Fingerprint)", "1. Basic Information (Fingerprint)");
+        add("help_field_name", "- name: 指纹名称 (唯一)", "- name: Fingerprint name (unique)");
+        add("help_field_type", "- type: 指纹类型 (如 CMS, Framework)", "- type: Fingerprint type (e.g., CMS)");
+        add("help_section_2", "2. 匹配规则 (Rule)", "2. Matching Rule (Rule)");
+        add("help_field_location", "- location: 匹配位置 (header, body, hash, status)", "- location: Position (header, body, hash, status)");
+        add("help_field_match", "- match: 关键字列表 (AND 逻辑)", "- match: Keywords (AND logic)");
+        add("help_field_path", "- path: 探测路径 (可选)", "- path: Probe path (optional)");
+        add("help_field_status", "- status: 状态码 (可选)", "- status: Status code (optional)");
+        add("help_field_field", "- field: Header 字段名 (可选)", "- field: Header field name (optional)");
 
         // Common
         add("common_error", "错误", "Error");
         add("common_confirm", "确认", "Confirm");
         add("common_info", "提示", "Information");
         add("common_total", "总数: ", "Total: ");
+        add("config_update_url", "规则更新地址: ", "Update URL: ");
+        add("config_update_url_hint", "提示: 若 GitHub 访问困难，可尝试使用镜像地址或代理前缀", "Hint: Try mirror or proxy if GitHub is inaccessible");
     }
 
     private static void add(String key, String cn, String en) {

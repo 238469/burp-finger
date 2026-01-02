@@ -27,6 +27,7 @@ public class ConfigPanel extends JPanel {
     private JSpinner threadCountSpinner;
     private JSpinner rpsSpinner;
     private JComboBox<I18n.Language> languageComboBox;
+    private JTextField updateUrlField;
 
     public ConfigPanel(MontoyaApi api, PassiveScanner passiveScanner, FingerTabPanel parentTabPanel) {
         this.api = api;
@@ -103,9 +104,22 @@ public class ConfigPanel extends JPanel {
         settingsPanel.add(rpsSpinner);
 
         mainPanel.add(settingsPanel);
+        mainPanel.add(Box.createVerticalStrut(15));
+
+        // 4. 规则更新地址
+        mainPanel.add(createSectionLabel(I18n.get("config_update_url")));
+        updateUrlField = new JTextField(config.getUpdateUrl());
+        updateUrlField.setMaximumSize(new Dimension(800, 30));
+        updateUrlField.setAlignmentX(Component.LEFT_ALIGNMENT);
+        mainPanel.add(updateUrlField);
+        JLabel hintLabel = new JLabel(I18n.get("config_update_url_hint"));
+        hintLabel.setForeground(Color.GRAY);
+        hintLabel.setFont(hintLabel.getFont().deriveFont(11f));
+        hintLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        mainPanel.add(hintLabel);
         mainPanel.add(Box.createVerticalStrut(20));
 
-        // 4. 保存按钮
+        // 5. 保存按钮
         JButton saveButton = new JButton(I18n.get("config_save"));
         saveButton.setAlignmentX(Component.LEFT_ALIGNMENT);
         saveButton.addActionListener(e -> saveConfig());
@@ -144,6 +158,7 @@ public class ConfigPanel extends JPanel {
             config.setExcludeBodyKeywords(keywords);
             config.setThreadCount((int) threadCountSpinner.getValue());
             config.setRequestsPerSecond((double) rpsSpinner.getValue());
+            config.setUpdateUrl(updateUrlField.getText().trim());
             
             I18n.Language newLang = (I18n.Language) languageComboBox.getSelectedItem();
             config.setLanguage(newLang);
