@@ -99,3 +99,5 @@ Finger 是一款专为 Burp Suite 打造的模块化指纹识别插件，旨在�
 ## ⚖️ 许可证
 
 本项目遵循 MIT 许可证。仅供安全研究与授权测试使用，严禁用于非法用途。
+![38c1ee07f2b252a4051aafefa673ddf0](https://github.com/user-attachments/assets/c3db078b-c366-442e-bf42-1ce68e608960)
+
