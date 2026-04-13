@@ -245,7 +245,7 @@ public class ActiveScanner {
                                 }
 
                                 if (path.equals(effectivePath)) {
-                                    if (checkSingleRule(rule, response)) {
+                                if (checkSingleRule(rule, response, fullPath)) {
                                         String resultUrl = baseUrl + fullPath;
                                         api.logging().logToOutput("[+] Active Match Found: " + fp.getName() + " at " + resultUrl);
                                         persistence.saveResults(resultUrl, Collections.singletonList(fp));
@@ -327,9 +327,9 @@ public class ActiveScanner {
         return scanDepth;
     }
 
-    private boolean checkSingleRule(Rule rule, HttpResponse response) {
+    private boolean checkSingleRule(Rule rule, HttpResponse response, String fullPath) {
         // 直接调用MatchingEngine的matchRule方法，使用相同的匹配逻辑
-        return matchingEngine.matchRule(rule, response.headers(), response.bodyToString(), response.body().getBytes(), response.statusCode(), rule.getPath());
+        return matchingEngine.matchRule(rule, response.headers(), response.bodyToString(), response.body().getBytes(), response.statusCode(), fullPath);
     }
     
 }
