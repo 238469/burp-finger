@@ -57,7 +57,7 @@ public class MatchingEngine {
         return matches;
     }
 
-    private boolean matchRule(Rule rule, List<HttpHeader> headers, String bodyText, byte[] bodyBytes, int statusCode, String currentPath) {
+    public boolean matchRule(Rule rule, List<HttpHeader> headers, String bodyText, byte[] bodyBytes, int statusCode, String currentPath) {
         // 1. 路径校验逻辑
         // 如果规则定义了 path，则只有在当前请求路径与之匹配时才允许命中（用于区分主动/被动规则）
         if (rule.getPath() != null && !rule.getPath().isEmpty()) {
