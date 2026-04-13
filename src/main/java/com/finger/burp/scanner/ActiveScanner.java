@@ -333,28 +333,94 @@ public class ActiveScanner {
             return false;
         }
         
-        // 匹配字符串 (AND 逻辑)
-        if (rule.getMatch() != null && !rule.getMatch().isEmpty()) {
-            String body = response.bodyToString();
-            if (body == null) return false;
-            for (String m : rule.getMatch()) {
-                if (!body.contains(m)) {
-                    return false;
-                }
-            }
+        String location = rule.getLocation();
+        if (location == null) {
+            // 如果没有指定 location 但指定了 status，且上面已经匹配通过，则返回 true
+            return rule.getStatus() != null;
         }
 
-        // 匹配 Hash (支持 MurmurHash3 和 MD5)
-        if (rule.getHash() != null && !rule.getHash().isEmpty()) {
-            byte[] bodyBytes = response.body().getBytes();
-            String actualMurmur = HashUtils.calculateFaviconHash(bodyBytes);
-            String actualMD5 = HashUtils.calculateMD5(bodyBytes);
-            
-            if (!rule.getHash().equals(actualMurmur) && !rule.getHash().equalsIgnoreCase(actualMD5)) {
+        switch (location.toLowerCase()) {
+            case "header":
+                return matchHeader(rule, response.headers());
+            case "body":
+                // 匹配字符串 (AND 逻辑)
+                if (rule.getMatch() != null && !rule.getMatch().isEmpty()) {
+                    String body = response.bodyToString();
+                    if (body == null) return false;
+                    for (String m : rule.getMatch()) {
+                        if (!body.contains(m)) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            case "hash":
+                // 匹配 Hash (支持 MurmurHash3 和 MD5)
+                if (rule.getHash() != null && !rule.getHash().isEmpty()) {
+                    byte[] bodyBytes = response.body().getBytes();
+                    String actualMurmur = HashUtils.calculateFaviconHash(bodyBytes);
+                    String actualMD5 = HashUtils.calculateMD5(bodyBytes);
+                    
+                    if (!rule.getHash().equals(actualMurmur) && !rule.getHash().equalsIgnoreCase(actualMD5)) {
+                        return false;
+                    }
+                }
+                return true;
+            case "status":
+                // 已经在开头检查过了，如果能走到这里说明状态码匹配或规则未设置状态码
+                // 对于 location 为 status 的规则，必须设置了 status 字段才算有效匹配
+                return rule.getStatus() != null;
+            default:
                 return false;
-            }
         }
+    }
+    
+    private boolean matchHeader(Rule rule, List<burp.api.montoya.http.message.HttpHeader> headers) {
+        String field = rule.getField();
+        List<String> matches = rule.getMatch();
         
+        if (matches == null || matches.isEmpty()) return false;
+
+        for (String matchPattern : matches) {
+            boolean found = false;
+            try {
+                java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(matchPattern, java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.DOTALL);
+                
+                for (burp.api.montoya.http.message.HttpHeader header : headers) {
+                    if (field != null && !field.isEmpty()) {
+                        if (header.name().equalsIgnoreCase(field)) {
+                            if (pattern.matcher(header.value()).find()) {
+                                found = true;
+                                break;
+                            }
+                        }
+                    } else {
+                        if (pattern.matcher(header.toString()).find()) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                // 如果正则解析失败，退回到普通的 contains 匹配
+                for (burp.api.montoya.http.message.HttpHeader header : headers) {
+                    if (field != null && !field.isEmpty()) {
+                        if (header.name().equalsIgnoreCase(field)) {
+                            if (header.value().contains(matchPattern)) {
+                                found = true;
+                                break;
+                            }
+                        }
+                    } else {
+                        if (header.toString().contains(matchPattern)) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (!found) return false;
+        }
         return true;
     }
     
