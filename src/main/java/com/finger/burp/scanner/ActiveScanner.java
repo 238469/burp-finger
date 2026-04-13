@@ -333,25 +333,77 @@ public class ActiveScanner {
             return false;
         }
         
-        // 匹配字符串 (AND 逻辑)
-        if (rule.getMatch() != null && !rule.getMatch().isEmpty()) {
-            String body = response.bodyToString();
-            if (body == null) return false;
-            for (String m : rule.getMatch()) {
-                if (!body.contains(m)) {
-                    return false;
+        String location = rule.getLocation();
+        
+        // 根据location选择不同的匹配方法
+        if ("header".equalsIgnoreCase(location)) {
+            // 匹配header
+            String field = rule.getField();
+            List<String> matches = rule.getMatch();
+            
+            if (matches == null || matches.isEmpty()) return false;
+
+            for (String matchPattern : matches) {
+                boolean found = false;
+                try {
+                    java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(matchPattern, java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.DOTALL);
+                    
+                    for (burp.api.montoya.http.message.HttpHeader header : response.headers()) {
+                        if (field != null && !field.isEmpty()) {
+                            if (header.name().equalsIgnoreCase(field)) {
+                                if (pattern.matcher(header.value()).find()) {
+                                    found = true;
+                                    break;
+                                }
+                            }
+                        } else {
+                            if (pattern.matcher(header.toString()).find()) {
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    // 如果正则解析失败，退回到普通的 contains 匹配
+                    for (burp.api.montoya.http.message.HttpHeader header : response.headers()) {
+                        if (field != null && !field.isEmpty()) {
+                            if (header.name().equalsIgnoreCase(field)) {
+                                if (header.value().contains(matchPattern)) {
+                                    found = true;
+                                    break;
+                                }
+                            }
+                        } else {
+                            if (header.toString().contains(matchPattern)) {
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (!found) return false;
+            }
+        } else if ("body".equalsIgnoreCase(location)) {
+            // 匹配字符串 (AND 逻辑)
+            if (rule.getMatch() != null && !rule.getMatch().isEmpty()) {
+                String body = response.bodyToString();
+                if (body == null) return false;
+                for (String m : rule.getMatch()) {
+                    if (!body.contains(m)) {
+                        return false;
+                    }
                 }
             }
-        }
-
-        // 匹配 Hash (支持 MurmurHash3 和 MD5)
-        if (rule.getHash() != null && !rule.getHash().isEmpty()) {
-            byte[] bodyBytes = response.body().getBytes();
-            String actualMurmur = HashUtils.calculateFaviconHash(bodyBytes);
-            String actualMD5 = HashUtils.calculateMD5(bodyBytes);
-            
-            if (!rule.getHash().equals(actualMurmur) && !rule.getHash().equalsIgnoreCase(actualMD5)) {
-                return false;
+        } else if ("hash".equalsIgnoreCase(location)) {
+            // 匹配 Hash (支持 MurmurHash3 和 MD5)
+            if (rule.getHash() != null && !rule.getHash().isEmpty()) {
+                byte[] bodyBytes = response.body().getBytes();
+                String actualMurmur = HashUtils.calculateFaviconHash(bodyBytes);
+                String actualMD5 = HashUtils.calculateMD5(bodyBytes);
+                
+                if (!rule.getHash().equals(actualMurmur) && !rule.getHash().equalsIgnoreCase(actualMD5)) {
+                    return false;
+                }
             }
         }
         
