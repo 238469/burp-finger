@@ -1,1 +1,1 @@
-[ { "name" : "东方通ejb反序列化", "type" : "Vulnerability", "rules" : [ { "location" : "header", "field" : "Server", "match" : [ "TongWeb Server" ], "status": 200 } ] } ]
+[ { "name" : "东方通ejb反序列化", "type" : "Vulnerability", "rules" : [ { "path" : "/ejbserver/ejb", "location" : "body", "match" : [ "TongWeb Server" ], "status": 200 } ] } ]
