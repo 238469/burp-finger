@@ -233,50 +233,41 @@ public class ActiveScanner {
                         return;
                     }
 
-                    for (Fingerprint fp : relatedFps) {
-                            // 检查该指纹下所有对应当前路径的规则 (path 或 hash)
-                            for (Rule rule : fp.getRules()) {
-                                String location = rule.getLocation();
-                                String rulePath = rule.getPath();
-                                String effectivePath = rulePath;
-                                
-                                if ("hash".equalsIgnoreCase(location)) {
-                                    effectivePath = (rulePath != null && !rulePath.isEmpty()) ? rulePath : "/favicon.ico";
-                                }
+                    // 使用 MatchingEngine 的 findMatches 方法来检查匹配
+                    List<com.finger.burp.engine.MatchResult> matches = matchingEngine.findMatches(response, fullPath);
+                    if (!matches.isEmpty()) {
+                        for (com.finger.burp.engine.MatchResult match : matches) {
+                            Fingerprint fp = match.getFingerprint();
+                            Rule rule = match.getMatchedRule();
+                            String resultUrl = baseUrl + fullPath;
+                            api.logging().logToOutput("[+] Active Match Found: " + fp.getName() + " at " + resultUrl);
+                            persistence.saveResults(resultUrl, Collections.singletonList(fp));
+                            
+                            // 构造匹配字段描述
+                            String location = rule.getLocation();
+                            String displayLocation = location;
+                            // 如果规则定义了 status 但没有定义 match/hash，说明是基于状态码的存活性探测
+                            if (rule.getStatus() != null && 
+                                (rule.getMatch() == null || rule.getMatch().isEmpty()) && 
+                                (rule.getHash() == null || rule.getHash().isEmpty())) {
+                                displayLocation = "status";
+                            }
 
-                                if (path.equals(effectivePath)) {
-                                    if (checkSingleRule(rule, response)) {
-                                        String resultUrl = baseUrl + fullPath;
-                                        api.logging().logToOutput("[+] Active Match Found: " + fp.getName() + " at " + resultUrl);
-                                        persistence.saveResults(resultUrl, Collections.singletonList(fp));
-                                        
-                                        // 构造匹配字段描述
-                                        String displayLocation = location;
-                                        // 如果规则定义了 status 但没有定义 match/hash，说明是基于状态码的存活性探测
-                                        if (rule.getStatus() != null && 
-                                            (rule.getMatch() == null || rule.getMatch().isEmpty()) && 
-                                            (rule.getHash() == null || rule.getHash().isEmpty())) {
-                                            displayLocation = "status";
-                                        }
-
-                                        String fieldDesc = displayLocation + ": " + fullPath;
-                                        if (rule.getDescription() != null && !rule.getDescription().isEmpty()) {
-                                            fieldDesc = "[" + rule.getDescription() + "] " + fieldDesc;
-                                        } else {
-                                            if (rule.getMatch() != null && !rule.getMatch().isEmpty()) {
-                                                fieldDesc += " (match: " + rule.getMatch() + ")";
-                                            } else if (rule.getHash() != null && !rule.getHash().isEmpty()) {
-                                                fieldDesc += " (hash: " + rule.getHash() + ")";
-                                            } else if (rule.getStatus() != null) {
-                                                fieldDesc += " (status: " + rule.getStatus() + ")";
-                                            }
-                                        }
-
-                                        // 更新 UI
-                                        tableModel.addResult(new ScanResult(resultUrl, fp.getName(), fp.getType(), "Active", fieldDesc));
-                                    }
+                            String fieldDesc = displayLocation + ": " + fullPath;
+                            if (rule.getDescription() != null && !rule.getDescription().isEmpty()) {
+                                fieldDesc = "[" + rule.getDescription() + "] " + fieldDesc;
+                            } else {
+                                if (rule.getMatch() != null && !rule.getMatch().isEmpty()) {
+                                    fieldDesc += " (match: " + rule.getMatch() + ")";
+                                } else if (rule.getHash() != null && !rule.getHash().isEmpty()) {
+                                    fieldDesc += " (hash: " + rule.getHash() + ")";
+                                } else if (rule.getStatus() != null) {
+                                    fieldDesc += " (status: " + rule.getStatus() + ")";
                                 }
                             }
+
+                            // 更新 UI
+                            tableModel.addResult(new ScanResult(resultUrl, fp.getName(), fp.getType(), "Active", fieldDesc));
                         }
                     }
                 } catch (Exception e) {
